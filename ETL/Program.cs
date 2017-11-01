@@ -16,9 +16,8 @@ namespace ETL
 {
     public class DBClient
     {
-
         private static string strConnection = ConfigurationManager.AppSettings["DSN"];
-        public void OpenConnection(ref SqlConnection objConn)
+        public static void OpenConnection(ref SqlConnection objConn)
         {
             try
             {
@@ -37,6 +36,22 @@ namespace ETL
             objEventLog.Source = "ETL App";
             objEventLog.WriteEntry(strError, System.Diagnostics.EventLogEntryType.Error, 1);
             objEventLog = null;
+        }
+
+        public static SqlDataReader ExecuteQuery(string query)
+        {
+            SqlConnection sqlConn = null;
+            SqlCommand sqlComm = null;
+            SqlDataReader reader;
+            DBClient.OpenConnection(ref sqlConn);
+
+            sqlComm = new SqlCommand(query, sqlConn);
+            sqlComm.CommandType = CommandType.Text;
+            sqlComm.CommandTimeout = 600;
+            //sqlComm.Parameters.AddWithValue("@District", strImportLine[15].Trim());
+            reader = sqlComm.ExecuteReader();
+            sqlComm.Dispose();
+            return reader;
         }
     }
     public class FTPClient
@@ -110,8 +125,10 @@ namespace ETL
 
     public class ApplicationEngine
     {
-        static void Main(string[] args) {
-
+        static void Main(string[] args)
+        {
+            SqlDataReader results;
+            results = DBClient.ExecuteQuery("select itemid, skucode from items");
             FTPClient myFtp = new FTPClient(ConfigurationManager.AppSettings["ftpUsername"], ConfigurationManager.AppSettings["ftpPassword"], ConfigurationManager.AppSettings["ftpURL"]);
             FileStream fs = new FileStream("C:\\testfile.txt", FileMode.Open, FileAccess.Read);
             if (myFtp.UploadFile(ConfigurationManager.AppSettings["itemsPath"], "tesftile.csv", fs) > 0)
@@ -122,6 +139,6 @@ namespace ETL
             {
                 Console.WriteLine("File Upload failed");
             }
-        }
+        }        
     }
 }
