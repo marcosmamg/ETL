@@ -2,44 +2,38 @@
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+
 namespace ETL
 {
     public class DBClient
     {
-        private static string strConnection = ConfigurationManager.AppSettings["DSN"];
-        public static void OpenConnection(ref SqlConnection objConn)
+        private static ConnectionStringSettings strConnection = ConfigurationManager.ConnectionStrings["testETL"];
+        private static void OpenConnection(ref SqlConnection objConnection)
         {
             try
             {
-                objConn = new SqlConnection();
-                objConn.ConnectionString = strConnection;
-                objConn.Open();
+                objConnection = new SqlConnection();
+                objConnection.ConnectionString = strConnection.ConnectionString; ;
+                objConnection.Open();
             }
             catch (Exception Ex)
             {
-                LogError("Opening Database Connection:" + Ex.Message);
+                Utilities.LogError("Opening Database Connection:" + Ex.Message);
             }
-        }
-        public static void LogError(string strError)
-        {
-            System.Diagnostics.EventLog objEventLog = new System.Diagnostics.EventLog("Application");
-            objEventLog.Source = "ETL App";
-            objEventLog.WriteEntry(strError, System.Diagnostics.EventLogEntryType.Error, 1);
-            objEventLog = null;
-        }
+        }       
 
-        public static SqlDataReader ExecuteQuery(string query)
+        public static SqlDataReader getQueryResultset(string query)
         {
-            SqlConnection sqlConn = null;
-            SqlCommand sqlComm = null;
+            SqlConnection sqlConnection = null;
+            SqlCommand sqlQuery = null;
             SqlDataReader reader;
-            DBClient.OpenConnection(ref sqlConn);
+            DBClient.OpenConnection(ref sqlConnection);
 
-            sqlComm = new SqlCommand(query, sqlConn);
-            sqlComm.CommandType = CommandType.Text;
-            sqlComm.CommandTimeout = 600;            
-            reader = sqlComm.ExecuteReader();
-            sqlComm.Dispose();
+            sqlQuery = new SqlCommand(query, sqlConnection);
+            sqlQuery.CommandType = CommandType.Text;
+            sqlQuery.CommandTimeout = 600;            
+            reader = sqlQuery.ExecuteReader();
+            sqlQuery.Dispose();
             return reader;
         }
     }

@@ -2,6 +2,8 @@
 using System.IO;
 using System.Net;
 using System.Configuration;
+using System.Data.SqlClient;
+
 namespace ETL
 {     
 
@@ -9,13 +11,14 @@ namespace ETL
     {
         static void Main(string[] args)
         {
+            SqlDataReader results;
             try
-            {
-                //SqlDataReader results;
-                //results = DBClient.ExecuteQuery("select itemid, skucode from items");
+            {                                
+                results = DBClient.getQueryResultset("select itemid, skucode from items");
+                CsvGenerator.GenerateCSV(results, Utilities.BaseDirectory(), "Test.csv");
                 FTPClient myFtp = new FTPClient(ConfigurationManager.AppSettings["ftpUsername"], ConfigurationManager.AppSettings["ftpPassword"], ConfigurationManager.AppSettings["ftpURL"]);
-                FileStream file = new FileStream("C:\\debug1214.txt", FileMode.Open, FileAccess.Read);
-                if (myFtp.UploadFile(ConfigurationManager.AppSettings["itemsPath"], "debug1214.csv", file) > 0)
+                FileStream file = new FileStream(Utilities.BaseDirectory() + "Test.CSV", FileMode.Open, FileAccess.Read);
+                if (myFtp.UploadFile(ConfigurationManager.AppSettings["itemsPath"], "Test.CSV", file) > 0)
                 {
                     Console.WriteLine("File Upload Successful");
                 }
@@ -26,13 +29,12 @@ namespace ETL
             }
             catch (WebException e)
             {
-                DBClient.LogError(e.Message.ToString());                
-                String status = ((FtpWebResponse)e.Response).StatusDescription;
-                DBClient.LogError(status);                
+                Utilities.LogError(e.Message.ToString());                                
+                Utilities.LogError(((FtpWebResponse)e.Response).StatusDescription);                
             }
             catch (Exception ex)
             {
-                DBClient.LogError(ex.Message.ToString());               
+                Utilities.LogError(ex.Message.ToString());               
             }
         }        
     }

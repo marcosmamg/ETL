@@ -49,15 +49,13 @@ namespace ETL
             }
             catch (WebException e)
             {
-                DBClient.LogError(e.Message.ToString());
-                //Console.WriteLine(e.Message.ToString());
-                String status = ((FtpWebResponse)e.Response).StatusDescription;
-                DBClient.LogError(status);
+                Utilities.LogError(e.Message.ToString());                                
+                Utilities.LogError(((FtpWebResponse)e.Response).StatusDescription);
                 return 0;
             }
             catch (Exception ex)
             {
-                DBClient.LogError(ex.Message.ToString());
+                Utilities.LogError(ex.Message.ToString());
                 return 0;
             }
         }
