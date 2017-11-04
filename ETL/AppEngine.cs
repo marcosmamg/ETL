@@ -11,30 +11,36 @@ namespace ETL
     {
         static void Main(string[] args)
         {
-            SqlDataReader results;
+            SqlDataReader sqlResults;            
             try
-            {                                
-                results = DBClient.getQueryResultset("select itemid, skucode from items");
-                CsvGenerator.GenerateCSV(results, Utilities.BaseDirectory(), "Test.csv");
-                FTPClient myFtp = new FTPClient(ConfigurationManager.AppSettings["ftpUsername"], ConfigurationManager.AppSettings["ftpPassword"], ConfigurationManager.AppSettings["ftpURL"]);
-                FileStream file = new FileStream(Utilities.BaseDirectory() + "Test.CSV", FileMode.Open, FileAccess.Read);
-                if (myFtp.UploadFile(ConfigurationManager.AppSettings["itemsPath"], "Test.CSV", file) > 0)
+            {
+                sqlResults = DBClient.getQueryResultset("select itemid, skucode from items");
+                if (sqlResults.HasRows)
                 {
-                    Console.WriteLine("File Upload Successful");
+                    if (CsvGenerator.GenerateCSV(sqlResults, Utilities.BaseDirectory(), "Test.csv") != 0)
+                    {
+                        Utilities.Log("CSV Filed not generated", "error");
+                        Environment.Exit(1);
+                    }
+                    FTPClient myFtp = new FTPClient(ConfigurationManager.AppSettings["ftpUsername"], ConfigurationManager.AppSettings["ftpPassword"], ConfigurationManager.AppSettings["ftpURL"]);
+                    FileStream file = new FileStream(Utilities.BaseDirectory() + "Test.CSV", FileMode.Open, FileAccess.Read);
+                    if (myFtp.UploadFile(ConfigurationManager.AppSettings["itemsPath"], "Test.CSV", file) != 0)
+                    {
+                        Utilities.Log("File xxx Upload failed", "error");
+                        Environment.Exit(1);
+                    }
                 }
                 else
                 {
-                    Console.WriteLine("File Upload failed");
+                    Utilities.Log("SQL Query returned no results", "error");                    
                 }
-            }
-            catch (WebException e)
-            {
-                Utilities.LogError(e.Message.ToString());                                
-                Utilities.LogError(((FtpWebResponse)e.Response).StatusDescription);                
-            }
+                Utilities.Log("Process completed succesfully");
+                Environment.Exit(0);
+            }            
             catch (Exception ex)
             {
-                Utilities.LogError(ex.Message.ToString());               
+                Utilities.Log(ex.Message.ToString(), "error");
+                Environment.Exit(1);
             }
         }        
     }

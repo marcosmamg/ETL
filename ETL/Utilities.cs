@@ -9,13 +9,25 @@ namespace ETL
 {
     class Utilities
     {
-        public static void LogError(string strError)
+        public static void Log(string strError, string action = "")
         {
-            // Write the string to a file named "ETLLog.txt".
-            using (StreamWriter outputFile = new StreamWriter(Utilities.BaseDirectory() + @"ETLLog.txt", true))
+            if (action == "error")
             {
-                outputFile.WriteLine(System.DateTime.Now.ToShortDateString() + ':' + strError);
+                // Write the string to a file named "ETLErrorLog.txt".
+                using (StreamWriter outputFile = new StreamWriter(Utilities.BaseDirectory() + @"ETLErrorLog.txt", true))
+                {
+                    outputFile.WriteLine(System.DateTime.Now.ToString() + ':' + strError);
+                }
             }
+            else
+            {
+                // Write the string to a file named "ETLLog.txt".
+                using (StreamWriter outputFile = new StreamWriter(Utilities.BaseDirectory() + @"ETLLog.txt", true))
+                {
+                    outputFile.WriteLine(System.DateTime.Now.ToString() + ':' + strError);
+                }
+            }
+            
         }
         public static string BaseDirectory()
         {

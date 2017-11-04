@@ -38,25 +38,21 @@ namespace ETL
                 Stream requestStream = request.GetRequestStream();
                 requestStream.Write(fileContents, 0, fileContents.Length);
                 requestStream.Close();
-
-                FtpWebResponse response = (FtpWebResponse)request.GetResponse();
-
-                Console.WriteLine("Upload File Complete, status {0}", response.StatusDescription);
-
+                FtpWebResponse response = (FtpWebResponse)request.GetResponse();                
+                Utilities.Log("Upload File Complete, status:" + response.StatusDescription);
                 response.Close();
 
-                return 1;
+                return 0;
             }
             catch (WebException e)
             {
-                Utilities.LogError(e.Message.ToString());                                
-                Utilities.LogError(((FtpWebResponse)e.Response).StatusDescription);
-                return 0;
+                Utilities.Log(e.Message.ToString(), "error");                
+                return 1;
             }
             catch (Exception ex)
             {
-                Utilities.LogError(ex.Message.ToString());
-                return 0;
+                Utilities.Log(ex.Message.ToString(), "error");
+                return 1;
             }
         }
     }

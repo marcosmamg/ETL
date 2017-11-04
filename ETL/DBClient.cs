@@ -18,7 +18,8 @@ namespace ETL
             }
             catch (Exception Ex)
             {
-                Utilities.LogError("Opening Database Connection:" + Ex.Message);
+                Utilities.Log("Opening Database Connection:" + Ex.Message, "error");
+                Environment.Exit(1);
             }
         }       
 
