@@ -8,6 +8,7 @@ namespace ETL
     public class DBClient
     {
         private static ConnectionStringSettings strConnection = ConfigurationManager.ConnectionStrings["testETL"];
+        // Method to open DB Connection
         private static void OpenConnection(ref SqlConnection objConnection)
         {
             try
@@ -23,6 +24,7 @@ namespace ETL
             }
         }       
 
+        //Method that executes SQL statements, but not stored procedures
         public static SqlDataReader getQueryResultset(string query)
         {
             SqlConnection sqlConnection = null;

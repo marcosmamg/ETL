@@ -14,6 +14,11 @@ namespace ETL
             SqlDataReader sqlResults;            
             try
             {
+                var a = QueryBuilder.ReadXML();
+                foreach (var pair in a)
+                {
+                    Console.WriteLine("{0}: {1}", pair.Key, pair.Value);
+                }
                 sqlResults = DBClient.getQueryResultset("select itemid, skucode from items");
                 if (sqlResults.HasRows)
                 {

@@ -11,6 +11,7 @@ namespace ETL
         public string URL { get; set; }
         public int Port { get; set; }
 
+        //Initilizes FTPClient
         public FTPClient(string _userName, string _password, string _URL, int _port = 21)
         {
             UserName = _userName;
@@ -18,7 +19,7 @@ namespace ETL
             URL = _URL;
             Port = _port;
         }
-
+        // Method receives file to upload it to a given path in the FTP defined in the AppConfig File
         public int UploadFile(String Path, String Filename, FileStream File)
         {
             try
@@ -38,6 +39,8 @@ namespace ETL
                 Stream requestStream = request.GetRequestStream();
                 requestStream.Write(fileContents, 0, fileContents.Length);
                 requestStream.Close();
+                
+                //Uploading File
                 FtpWebResponse response = (FtpWebResponse)request.GetResponse();                
                 Utilities.Log("Upload File Complete, status:" + response.StatusDescription);
                 response.Close();
