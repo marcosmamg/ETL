@@ -13,10 +13,10 @@ namespace ETL
     {
         public static Dictionary<String, String> ReadXML()
         {
-            //try
-            //{                  
             Dictionary<String, String> filters = new Dictionary<String, String>();
             Dictionary<String, String> queries = new Dictionary<String, String>();
+            try
+            {                              
             var keyname = "";
             XDocument doc = XDocument.Load(Utilities.BaseDirectory() + "queries.xml");
             //Extracting Filters
@@ -27,38 +27,36 @@ namespace ETL
 
             //Extracting queries with no filters yet
             foreach (XElement element in doc.XPathSelectElement("//queries").Descendants())
-            {                
-                if (element.Name.ToString() == "query")
+            {
+                switch(element.Name.ToString())
                 {
-                    keyname = element.Attribute("name").Value;
-                }
-
-                if (element.Name.ToString() == "sql")
-                {
-                    queries.Add(keyname + element.Name, element.Value);
-                }
-                else if (element.Name.ToString() == "filter")
-                {
-                    foreach (var pair in filters)
-                    {
-                        if (element.Attribute("name").Value == pair.Key)
+                    case "query":
+                        keyname = element.Attribute("name").Value;
+                        break;
+                    case "sql":
+                        queries.Add(keyname + element.Name, element.Value);
+                        break;
+                    case "filter":
+                        foreach (var pair in filters)
                         {
-                            queries.Add(keyname + element.Name, "WHERE " + pair.Key + " IN (" + pair.Value + ')');
+                            if (element.Attribute("name").Value == pair.Key)
+                            {
+                                queries.Add(keyname + element.Name, "WHERE " + pair.Key + " IN (" + pair.Value + ')');
+                            }
                         }
-                    }                    
-                }
-                else if (element.Name.ToString() == "path")
-                {
-                    queries.Add(keyname + element.Name, element.Value);
-                }
+                        break;
+                    case "path":
+                        queries.Add(keyname + element.Name, element.Value);
+                        break;
+                }           
             }
             return queries;
-            //}
-            //catch(Exception ex)
-            //{
-            //    Utilities.Log(ex.https://www.google.com.ni/url?sa=t&rct=j&q=&esrc=s&source=web&cd=2&ved=0ahUKEwi26KD4gaTXAhWJwiYKHbRqCOcQFggtMAE&url=https%3A%2F%2Fstackoverflow.com%2Fquestions%2F6209841%2Fhow-to-use-xpath-with-xdocument&usg=AOvVaw3f4NpYcV_g9NcBvSUpiCWTMessage.ToString(), "error");
-            //    return "";
-            //}
+            }
+            catch (Exception ex)
+            {
+                Utilities.Log("Query Builder, status:" + ex.Message.ToString(), "error");
+                return queries;
+            }
         }
 
     }
