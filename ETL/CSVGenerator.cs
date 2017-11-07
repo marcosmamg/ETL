@@ -2,40 +2,40 @@
 using CsvHelper;
 using System.IO;
 using System;
+using System.Data;
+using System.Configuration;
 
 namespace ETL
 {
     public class CsvGenerator
     {
         //Method that generates CSV File from SQLDatareader
-        public static int GenerateCSV(SqlDataReader DatafromSQl, string Path, string fileName)
-        {
+        public static int GenerateCSV(DataTable DatafromSQl, string fileName)
+        {            
             try
-            {
-                var hasHeaderBeenWritten = false;
-                
+            {              
                 //Creating a file
                 using (var textWriter = File.CreateText(fileName))
                 using (var csv = new CsvWriter(textWriter))
                 {
-                    //Iterates over SQLDataReader
-                    while (DatafromSQl.Read())
-                    {
-                        //Validates if header has been writen
-                        if (!hasHeaderBeenWritten)
-                        {
-                            for (var i = 0; i < DatafromSQl.FieldCount; i++)
-                            {
-                                csv.WriteField(DatafromSQl.GetName(i));
-                            }
-                            csv.NextRecord();
-                            hasHeaderBeenWritten = true;
-                        }
+                    csv.Configuration.QuoteNoFields = true;
+                    csv.Configuration.Comment = '#';                    
+                    csv.Configuration.SanitizeForInjection = false;
+                    csv.Configuration.HasHeaderRecord = bool.Parse(ConfigurationManager.AppSettings["HasCSVHeader"]);
 
-                        //Iterate over Data to write in File
-                        for (var i = 0; i < DatafromSQl.FieldCount; i++)
+                    // Write columns
+                    foreach (DataColumn column in DatafromSQl.Columns)
+                    {
+                        csv.WriteField(column.ColumnName);
+                    }
+                    csv.NextRecord();
+
+                    // Write row values
+                    foreach (DataRow row in DatafromSQl.Rows)
+                    {
+                        for (var i = 0; i < DatafromSQl.Columns.Count; i++)
                         {
-                            csv.WriteField(DatafromSQl[i]);
+                            csv.WriteField(row[i]);
                         }
                         csv.NextRecord();
                     }

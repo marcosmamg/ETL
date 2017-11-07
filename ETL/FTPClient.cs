@@ -17,14 +17,15 @@ namespace ETL
             UserName = _userName;
             Password = _password;
             URL = _URL;
-            Port = _port;
+            //Port = _port; Define if needed
         }
         // Method receives file to upload it to a given path in the FTP defined in the AppConfig File
         public int UploadFile(String Path, String Filename, FileStream File)
         {
             try
             {
-                // Get the object used to communicate with the server.  
+                // Get the object used to communicate with the server.
+                Console.WriteLine(URL + ':' + Port + Path + Filename);
                 FtpWebRequest request = (FtpWebRequest)WebRequest.Create(URL + Path + Filename);
                 request.Method = WebRequestMethods.Ftp.UploadFile;                
                 request.Credentials = new NetworkCredential(UserName, Password);
