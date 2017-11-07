@@ -17,9 +17,9 @@ namespace ETL
                 objConnection.ConnectionString = strConnection.ConnectionString; ;
                 objConnection.Open();
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
-                Utilities.Log("Opening Database Connection:" + Ex.Message, "error");
+                Utilities.Log("Opening Database Connection:" + ex.Message + ex.ToString(), "error");
                 Environment.Exit(1);
             }
         }       

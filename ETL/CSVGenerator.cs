@@ -42,9 +42,9 @@ namespace ETL
                 }
                 return 0;
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
-                Utilities.Log("Generating CSV File:" + Ex.Message, "error");
+                Utilities.Log("Generating CSV File:" + ex.Message + ex.ToString(), "error");
                 return 1;
             }
         }

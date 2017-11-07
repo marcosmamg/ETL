@@ -44,7 +44,7 @@ namespace ETL
             }            
             catch (Exception ex)
             {
-                Utilities.Log(ex.Message.ToString(), "error");
+                Utilities.Log(ex.Message.ToString() + ex.ToString(), "error");
                 Environment.Exit(1);
             }
         }        

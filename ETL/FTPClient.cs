@@ -49,12 +49,12 @@ namespace ETL
             }
             catch (WebException e)
             {
-                Utilities.Log(e.Message.ToString(), "error");                
+                Utilities.Log(e.Message.ToString() + e.ToString(), "error");                
                 return 1;
             }
             catch (Exception ex)
             {
-                Utilities.Log(ex.Message.ToString(), "error");
+                Utilities.Log(ex.Message.ToString() + ex.ToString(), "error");
                 return 1;
             }
         }

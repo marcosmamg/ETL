@@ -54,7 +54,7 @@ namespace ETL
             }
             catch (Exception ex)
             {
-                Utilities.Log("Query Builder, status:" + ex.Message.ToString(), "error");
+                Utilities.Log("Query Builder, status:" + ex.Message.ToString() + ex.ToString(), "error");
                 return queries;
             }
         }
