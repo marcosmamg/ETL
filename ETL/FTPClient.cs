@@ -17,16 +17,15 @@ namespace ETL
             UserName = _userName;
             Password = _password;
             URL = _URL;
-            //Port = _port; Define if needed
+            Port = _port;
         }
         // Method receives file to upload it to a given path in the FTP defined in the AppConfig File
-        public int UploadFile(String Path, String Filename, FileStream File)
+        public Boolean UploadFile(String Path, String Filename, FileStream File)
         {
             try
             {
-                // Get the object used to communicate with the server.
-                Console.WriteLine(URL + ':' + Port + Path + Filename);
-                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(URL + Path + Filename);
+                // Get the object used to communicate with the server.                
+                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(URL + ':' + Port + Path + Filename);
                 request.Method = WebRequestMethods.Ftp.UploadFile;                
                 request.Credentials = new NetworkCredential(UserName, Password);
 
@@ -46,18 +45,33 @@ namespace ETL
                 Utilities.Log("Upload File Complete, status:" + response.StatusDescription);
                 response.Close();
 
-                return 0;
+                //Deleting File from File System
+                RemoveFile(Filename);
+                return true;
             }
             catch (WebException e)
             {
-                Utilities.Log(e.Message.ToString() + e.ToString(), "error");                
-                return 1;
+                Utilities.Log("FTP Client:" + e.Message.ToString() + e.ToString(), "error");                
+                return false;
             }
             catch (Exception ex)
             {
-                Utilities.Log(ex.Message.ToString() + ex.ToString(), "error");
-                return 1;
+                Utilities.Log("FTP Client:" + ex.Message.ToString() + ex.ToString(), "error");
+                return false;
             }
+        }
+
+        public void RemoveFile(string FileName)
+        {
+            try
+            {
+                File.Delete(FileName);
+            }
+            catch (Exception ex)
+            {
+                Utilities.Log("FTP Client:" + ex.Message.ToString() + ex.ToString(), "error");                
+            }
+
         }
     }
 }

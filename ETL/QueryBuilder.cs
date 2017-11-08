@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
+using System.Data;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
@@ -11,52 +8,64 @@ namespace ETL
 {
     class QueryBuilder
     {
-        public static Dictionary<String, String> ReadXML()
-        {
-            Dictionary<String, String> filters = new Dictionary<String, String>();
-            Dictionary<String, String> queries = new Dictionary<String, String>();
-            try
-            {                              
-            var keyname = "";
-            XDocument doc = XDocument.Load(Utilities.BaseDirectory() + "queries.xml");
-            //Extracting Filters
-            foreach (XElement element in doc.XPathSelectElement("//filters").Descendants())
-            {
-                filters.Add(element.Attribute("name").Value,element.Value);                
-            }
+        private static XDocument doc = XDocument.Load(Utilities.BaseDirectory() + "queries.xml");
 
-            //Extracting queries with no filters yet
-            foreach (XElement element in doc.XPathSelectElement("//queries").Descendants())
+        public static List<DataTable> BuildQueries()
+        {
+            List<DataTable> queries = new List<DataTable>();
+            try
             {
-                switch(element.Name.ToString())
+                var filters = getFilters();
+                foreach (var filter in filters)
                 {
-                    case "query":
-                        keyname = element.Attribute("name").Value;
-                        break;
-                    case "sql":
-                        queries.Add(keyname + element.Name, element.Value);
-                        break;
-                    case "filter":
-                        foreach (var pair in filters)
+                    foreach (DataRow row in filter.Rows)
+                    {
+                        for (var i = 0; i < filter.Columns.Count; i++)
                         {
-                            if (element.Attribute("name").Value == pair.Key)
-                            {
-                                queries.Add(keyname + element.Name, "WHERE " + pair.Key + " IN (" + pair.Value + ')');
-                            }
+                            Console.WriteLine(row[i]);
                         }
-                        break;
-                    case "path":
-                        queries.Add(keyname + element.Name, element.Value);
-                        break;
-                }           
-            }
-            return queries;
+                    }
+                }
+
+                //Extracting queries with no filters yet
+                foreach (XElement element in doc.XPathSelectElement("//query").Descendants())
+                {
+                    switch (element.Name.ToString())
+                    {
+                        case "sql":
+                            queries.Add(DBClient.getQueryResultset(element.Value));
+                            break;
+                    }
+                }
+                foreach (var query in queries)
+                {
+                    foreach (DataRow row in query.Rows)
+                    {
+                        for (var i = 0; i < query.Columns.Count; i++)
+                        {
+                            Console.WriteLine(row[i]);
+                        }
+                    }
+                }
+                return queries;
             }
             catch (Exception ex)
             {
                 Utilities.Log("Query Builder, status:" + ex.Message.ToString() + ex.ToString(), "error");
                 return queries;
             }
+        }
+
+        public static List<DataTable> getFilters()
+        {
+            List<DataTable> filters = new List<DataTable>();
+            //Dictionary<String, String> filters = new Dictionary<String, String>();            
+            //Extracting Filters
+            foreach (XElement element in doc.XPathSelectElement("//filters").Descendants())
+            {                
+                filters.Add(DBClient.getQueryResultset(element.Value));                
+            }
+            return filters;
         }
 
     }

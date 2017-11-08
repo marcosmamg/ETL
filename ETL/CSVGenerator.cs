@@ -10,7 +10,7 @@ namespace ETL
     public class CsvGenerator
     {
         //Method that generates CSV File from SQLDatareader
-        public static int GenerateCSV(DataTable DatafromSQl, string fileName)
+        public static Boolean GenerateCSV(DataTable DatafromSQl, string fileName)
         {            
             try
             {              
@@ -40,12 +40,12 @@ namespace ETL
                         csv.NextRecord();
                     }
                 }
-                return 0;
+                return true;
             }
             catch (Exception ex)
             {
                 Utilities.Log("Generating CSV File:" + ex.Message + ex.ToString(), "error");
-                return 1;
+                return false;
             }
         }
     }
