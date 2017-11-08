@@ -8,7 +8,7 @@ namespace ETL
 {
     public class DBClient
     {
-        private static ConnectionStringSettings strConnection = ConfigurationManager.ConnectionStrings["testETL"];
+        private static ConnectionStringSettings strConnection = ConfigurationManager.ConnectionStrings["ETL"];
         // Method to open DB Connection
         private static void OpenConnection(ref OdbcConnection objConnection)
         {

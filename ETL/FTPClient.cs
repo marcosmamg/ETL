@@ -46,7 +46,7 @@ namespace ETL
                 response.Close();
 
                 //Deleting File from File System
-                RemoveFile(Filename);
+                //RemoveFile(Filename);
                 return true;
             }
             catch (WebException e)
