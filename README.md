@@ -28,8 +28,9 @@ This project is a consoled application that uses C#. It reads an XML file where 
         </query>      
 	</queries>
 </queriesLibrary>
-```xml
+```
+
 ## Usage
-*	Edit ETL.exe.config and set the values for the FTP and the ODBC Connection
-*   Make sure the XML file is on the root of the .exe
-*	Run the Exe and refer to the logs files: ETLErrorLog.txt and ETLLog.txt
+	*	Edit ETL.exe.config and set the values for the FTP and the ODBC Connection
+	*   Make sure the XML file is on the root of the .exe
+	*	Run the Exe and refer to the logs files: ETLErrorLog.txt and ETLLog.txt
