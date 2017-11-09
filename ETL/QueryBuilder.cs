@@ -83,13 +83,15 @@ namespace ETL
                         var CurrentFilter = row[i];
                         if (CurrentFilter.GetType() == typeof(String))
                         {
+                            //Compare with attibute
                             var DataRow = Data.AsEnumerable()
-                            .Where(r => r.Field<string>(element.Value.ToString()) == CurrentFilter.ToString().Trim());
+                            .Where(r => r.Field<string>(element.Attribute("field").Value.ToString()) == CurrentFilter.ToString().Trim());
                             if (DataRow.Count() > 0)
                             {
                                 var currentData = DataRow.CopyToDataTable();
-                                if (!bool.Parse(element.Attribute("includeInFile").Value.ToString()))
-                                    currentData.Columns.RemoveAt(Int32.Parse(element.Attribute("field").Value) - 1);
+                                //TODO: create a function to validate inculdeinfile and manage excepion
+                                if (IncludeColumnInFile(element))
+                                    currentData.Columns.Remove(element.Attribute("field").Value.ToString());
 
                                 currentData.ExtendedProperties.Add("Path", GetPath(element, CurrentFilter.ToString().Trim()));
                                 currentData.ExtendedProperties.Add("FileName", Data.TableName);
@@ -109,7 +111,18 @@ namespace ETL
             }
             return dataFiltered;
         }
-
+        private static bool IncludeColumnInFile(XElement element)
+        {
+            try
+            {
+                return bool.Parse(element.Attribute("includeInFile").Value.ToString());
+            }
+            catch
+            {
+                return false;
+            }
+            
+        }
         private static String GetPath(XElement element, String Filter)
         {
             String Path = null;

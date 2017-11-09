@@ -26,12 +26,14 @@ namespace ETL
                     csv.Configuration.SanitizeForInjection = false;
                     csv.Configuration.HasHeaderRecord = bool.Parse(ConfigurationManager.AppSettings["HasCSVHeader"]);
 
-                    // Write columns to File
-                    foreach (DataColumn column in DatafromSQl.Columns)
+                    if (csv.Configuration.HasHeaderRecord)
                     {
-                        csv.WriteField(column.ColumnName);
-                    }
-                    csv.NextRecord();
+                        foreach (DataColumn column in DatafromSQl.Columns)
+                        {
+                            csv.WriteField(column.ColumnName);
+                        }
+                        csv.NextRecord();
+                    }                  
 
                     // Write row values to File
                     foreach (DataRow row in DatafromSQl.Rows)

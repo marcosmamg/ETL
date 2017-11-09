@@ -28,10 +28,7 @@ namespace ETL
                 //Build Full Path to upload file
                 string FullPath = URL + ':' + Port + '/' + Path;
                 
-                //Create Root Folder if does not exist
-                CreateFolder(URL + ':' + Port + ConfigurationManager.AppSettings["ftpRootPath"]);
-
-                //Create Path Folder for File if does not exist
+                //TODO: Create Path Folder for File if does not exist (levels?)
                 CreateFolder(FullPath);
 
                 // Get the object used to communicate with the server.                
@@ -86,7 +83,7 @@ namespace ETL
                 //Verifying if the folder was correctly listed
                 using (FtpWebResponse response = (FtpWebResponse)request.GetResponse())
                 {
-                    Console.WriteLine("Root Folder already exist");
+                    Console.WriteLine("Folder already exist");
                 }
             }
             catch (WebException ex)
@@ -112,7 +109,7 @@ namespace ETL
                     {
                         Utilities.Log("FTP Client:" + ((FtpWebResponse)ex.Response).StatusDescription);
                     }
-                    
+
                 }
             }
         }
