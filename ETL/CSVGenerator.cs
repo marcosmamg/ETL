@@ -10,12 +10,14 @@ namespace ETL
     public class CsvGenerator
     {
         //Method that generates CSV File from SQLDatareader
-        public static Boolean GenerateCSV(DataTable DatafromSQl, string fileName)
+        public static Boolean GenerateCSV(DataTable DatafromSQl, string Path, string FileName)
         {            
             try
-            {              
+            {
+                //Create path if it does not exist
+                System.IO.Directory.CreateDirectory(Path);
                 //Creating a file
-                using (var textWriter = File.CreateText(fileName))
+                using (var textWriter = File.CreateText(Path + FileName))
                 using (var csv = new CsvWriter(textWriter))
                 {
                     csv.Configuration.QuoteNoFields = true;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
@@ -19,11 +20,18 @@ namespace ETL
                 //Extracting queries with no filters yet
                 foreach (XElement element in doc.XPathSelectElement("//queries").Descendants())
                 {
-                    switch (element.Name.ToString())
+                    switch (element.Name.ToString(
+                        ))
                     {
                         case "sql":
                             var datatable= DBClient.getQueryResultset(element.Value);
-                            datatable.TableName = element.Parent.Attribute("name").Value + ".csv";
+
+                            IEnumerable<XElement> path = element.ElementsAfterSelf("path");
+                            foreach (XElement el in path)
+                            {
+                                datatable.TableName = el.Attribute("filename").Value;
+                            }
+
                             IEnumerable<XElement> filters = element.ElementsAfterSelf("filter");
                             foreach (XElement el in filters)
                             {
@@ -41,7 +49,7 @@ namespace ETL
                 return queries;
             }
         }
-        public static List<DataTable> GetDataForFilters(String FilterName)
+        private static List<DataTable> GetDataForFilters(String FilterName)
         {
             List<DataTable> FiltersData = new List<DataTable>();
 
@@ -57,7 +65,7 @@ namespace ETL
             return FiltersData;
         }
 
-        public static List<DataTable> ApplyFilter(XElement element, DataTable Data)
+        private static List<DataTable> ApplyFilter(XElement element, DataTable Data)
         {
             List<DataTable> filters = GetDataForFilters(element.Value.ToString());
             List<DataTable> dataFiltered = new List<DataTable>();
@@ -73,7 +81,9 @@ namespace ETL
                             var currentData = Data.AsEnumerable()
                             .Where(r => r.Field<string>(element.Value.ToString()) == CurrentFilter.ToString().Trim())
                             .CopyToDataTable();
-                            currentData.ExtendedProperties.Add("Path", "/public_html/ETL/items/");
+                            if (!bool.Parse(element.Attribute("includeInFile").Value.ToString()))
+                                currentData.Columns.RemoveAt(Int32.Parse(element.Attribute("field").Value) - 1);
+                            currentData.ExtendedProperties.Add("Path", GetPath(element, CurrentFilter.ToString()));
                             currentData.ExtendedProperties.Add("FileName", Data.TableName);
                             dataFiltered.Add(currentData);
                         }
@@ -88,26 +98,37 @@ namespace ETL
                 }                
             }
             return dataFiltered;
-        }     
+        }
+
+        private static String GetPath(XElement element, String Filter)
+        {
+            String Path = null;
+            IEnumerable<XElement> paths = element.ElementsAfterSelf("path");
+            foreach (XElement el in paths)
+            {
+                Path = el.Value;
+            }
+            Regex rgx = new Regex("\\{\\w+\\}");            
+            return rgx.Replace(Path, Filter);
+        }
+             
 
     }
 }
 //<queriesLibrary>
 //	<filters>       
-//		<sql name = "seller" > select name from sellers</sql>        		
-//		<sql name = "seller2" > select name from sellers</sql>        		
+//		<sql name = "seller" > select abbr from sellers</sql>        				
 //	</filters>
 //	<queries>
 //        <query name = "items" >
-
 //            < sql > select itemid, skucode, seller from items</sql>
 //            <filter field = "3" includeInFile="false">seller</filter>
-//            <path>/ftp/{seller}/clients.csv</path>
+//            <path filename = "items.csv" >/ public_html / ETL /{seller}/</path>
 //        </query>        
 //        <query name = "providers" >
-//            < sql > select itemid, skucode from items where balance &gt; 0 </sql>
-//            <filter>seller2</filter>
-//            <path>/ ftp /{seller}/items.csv</path>
+//            < sql > select itemid, skucode, seller from items where balance &gt; 0 </sql>
+//            <filter field = "3" includeInFile="true">seller</filter>
+//            <path filename = "providers.csv" >/ public_html / ETL /{seller}/</path>
 //        </query>        
 //	</queries>
 //</queriesLibrary>

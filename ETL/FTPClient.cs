@@ -9,10 +9,10 @@ namespace ETL
         public string UserName { get; set; }
         public string Password { get; set; }
         public string URL { get; set; }
-        public int Port { get; set; }
+        public string Port { get; set; }
 
         //Initilizes FTPClient
-        public FTPClient(string _userName, string _password, string _URL, int _port = 21)
+        public FTPClient(string _userName, string _password, string _URL, string _port = "21")
         {
             UserName = _userName;
             Password = _password;
@@ -20,12 +20,13 @@ namespace ETL
             Port = _port;
         }
         // Method receives file to upload it to a given path in the FTP defined in the AppConfig File
-        public Boolean UploadFile(String Path, String Filename, FileStream File)
+        public Boolean UploadFile(string Path, FileStream File)
         {
             try
             {
                 // Get the object used to communicate with the server.                
-                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(URL + ':' + Port + Path + Filename);
+                Console.WriteLine(URL + ':' + Port + Path);
+                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(URL + ':' + Port + Path);
                 request.Method = WebRequestMethods.Ftp.UploadFile;                
                 request.Credentials = new NetworkCredential(UserName, Password);
 
@@ -46,7 +47,7 @@ namespace ETL
                 response.Close();
 
                 //Deleting File from File System
-                //RemoveFile(Filename);
+                RemoveFile(Path);
                 return true;
             }
             catch (WebException e)

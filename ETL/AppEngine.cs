@@ -19,21 +19,19 @@ namespace ETL
                 
                 if (queries.Count > 0)
                 {
-                    Console.WriteLine("Generating CSV");
-                    var i = 0;
+                    Console.WriteLine("Generating CSV");                    
                     foreach (var query in queries)
-                    {
-                        i++;
+                    {                        
                         String FilePath  = query.ExtendedProperties["Path"].ToString();
                         String FileName = query.ExtendedProperties["FileName"].ToString();
-                        if (!CsvGenerator.GenerateCSV(query, i + "Test.csv"))
+                        if (!CsvGenerator.GenerateCSV(query, Utilities.BaseDirectory() + FilePath, FileName))
                         {
                             Utilities.Log("CSV Filed not generated", "error");
                         }
                         Console.WriteLine("Uploading to FTP");
-                        FTPClient myFtp = new FTPClient(ConfigurationManager.AppSettings["ftpUsername"], ConfigurationManager.AppSettings["ftpPassword"], ConfigurationManager.AppSettings["ftpURL"]);
-                        FileStream file = new FileStream(Utilities.BaseDirectory() + i +"Test.CSV", FileMode.Open, FileAccess.Read);
-                        if (!myFtp.UploadFile(FilePath, i + "Test.CSV", file))
+                        FTPClient myFtp = new FTPClient(ConfigurationManager.AppSettings["ftpUsername"], ConfigurationManager.AppSettings["ftpPassword"], ConfigurationManager.AppSettings["ftpURL"], ConfigurationManager.AppSettings["ftpPort"]);
+                        FileStream file = new FileStream(Utilities.BaseDirectory() + FilePath + FileName, FileMode.Open, FileAccess.Read);
+                        if (!myFtp.UploadFile(FilePath + FileName, file))
                         {
                             Utilities.Log("File Upload failed", "error");
                         }
