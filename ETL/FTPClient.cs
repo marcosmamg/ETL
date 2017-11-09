@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -20,13 +21,22 @@ namespace ETL
             Port = _port;
         }
         // Method receives file to upload it to a given path in the FTP defined in the AppConfig File
-        public Boolean UploadFile(string Path, FileStream File)
+        public Boolean UploadFile(string Path, string FileName, FileStream File)
         {
             try
             {
                 // Get the object used to communicate with the server.                
-                Console.WriteLine(URL + ':' + Port + Path);
-                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(URL + ':' + Port + Path);
+                string FullPath = URL + ':' + Port + '/' + Path;
+                
+                //Create Root Folder if does not exist
+                CreateFolder(URL + ':' + Port + ConfigurationManager.AppSettings["ftpRootPath"]);
+
+                //Create Path Folder for File if does not exist
+                CreateFolder(FullPath);
+
+                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(FullPath +  FileName);
+                Console.WriteLine(URL + ':' + Port + Path + FileName);
+                request.Method = WebRequestMethods.Ftp.MakeDirectory;
                 request.Method = WebRequestMethods.Ftp.UploadFile;                
                 request.Credentials = new NetworkCredential(UserName, Password);
 
@@ -47,7 +57,7 @@ namespace ETL
                 response.Close();
 
                 //Deleting File from File System
-                RemoveFile(Path);
+                RemoveFile(Utilities.BaseDirectory() + Path + FileName);
                 return true;
             }
             catch (WebException e)
@@ -61,7 +71,40 @@ namespace ETL
                 return false;
             }
         }
-
+       
+        private void CreateFolder(string FolderPath)
+        {
+            try
+            {
+                Console.WriteLine(FolderPath);
+                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(FolderPath);
+                request.Method = WebRequestMethods.Ftp.ListDirectory;
+                request.Credentials = new NetworkCredential(UserName, Password);
+                using (FtpWebResponse response = (FtpWebResponse)request.GetResponse())
+                {
+                    Console.WriteLine("Root Folder already exist");
+                }
+            }
+            catch (WebException ex)
+            {
+                if (ex.Response != null)
+                {
+                    FtpWebResponse response = (FtpWebResponse)ex.Response;
+                    if (response.StatusCode == FtpStatusCode.ActionNotTakenFileUnavailable)
+                    {
+                        WebRequest requestRootFolder = WebRequest.Create(FolderPath);
+                        requestRootFolder.Method = WebRequestMethods.Ftp.MakeDirectory;
+                        requestRootFolder.Credentials = new NetworkCredential(UserName, Password);
+                        using (var resp = (FtpWebResponse)requestRootFolder.GetResponse())
+                        {
+                            Console.WriteLine(resp.StatusCode);
+                            Utilities.Log("FTP Client:" + resp.StatusCode);
+                        }
+                    }
+                    Utilities.Log("FTP Client:" + ((FtpWebResponse)ex.Response).StatusDescription);
+                }
+            }
+        }
         public void RemoveFile(string FileName)
         {
             try

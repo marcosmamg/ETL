@@ -32,7 +32,7 @@ namespace ETL
                                 datatable.TableName = el.Attribute("filename").Value;
                             }
 
-                            IEnumerable<XElement> filters = element.ElementsAfterSelf("filter");
+                            IEnumerable<XElement> filters = element.ElementsAfterSelf("filter");                            
                             foreach (XElement el in filters)
                             {
                                 foreach (var datafiltered in ApplyFilter(el, datatable))                                
@@ -83,7 +83,7 @@ namespace ETL
                             .CopyToDataTable();
                             if (!bool.Parse(element.Attribute("includeInFile").Value.ToString()))
                                 currentData.Columns.RemoveAt(Int32.Parse(element.Attribute("field").Value) - 1);
-                            currentData.ExtendedProperties.Add("Path", GetPath(element, CurrentFilter.ToString()));
+                            currentData.ExtendedProperties.Add("Path", GetPath(element, CurrentFilter.ToString().Trim()));
                             currentData.ExtendedProperties.Add("FileName", Data.TableName);
                             dataFiltered.Add(currentData);
                         }

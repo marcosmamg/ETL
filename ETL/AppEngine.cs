@@ -31,7 +31,7 @@ namespace ETL
                         Console.WriteLine("Uploading to FTP");
                         FTPClient myFtp = new FTPClient(ConfigurationManager.AppSettings["ftpUsername"], ConfigurationManager.AppSettings["ftpPassword"], ConfigurationManager.AppSettings["ftpURL"], ConfigurationManager.AppSettings["ftpPort"]);
                         FileStream file = new FileStream(Utilities.BaseDirectory() + FilePath + FileName, FileMode.Open, FileAccess.Read);
-                        if (!myFtp.UploadFile(FilePath + FileName, file))
+                        if (!myFtp.UploadFile(FilePath, FileName, file))
                         {
                             Utilities.Log("File Upload failed", "error");
                         }
