@@ -10,14 +10,16 @@ namespace ETL
 {
     class QueryBuilder
     {
+        //queries.xml file must be on the root of the .exe file
         private static XElement doc = XElement.Load(Utilities.BaseDirectory() + "queries.xml");
         
+        //Method to get Data from SQL Queries configured in XML File
         public static List<DataTable> GetDataFromSQL()
         {
             List<DataTable> queries = new List<DataTable>();
             try
             {                
-                //Extracting queries with no filters yet
+                //Extracting queries with no filters yet from XML
                 foreach (XElement element in doc.XPathSelectElement("//queries").Descendants())
                 {
                     switch (element.Name.ToString(
@@ -32,7 +34,10 @@ namespace ETL
                                 datatable.TableName = el.Attribute("filename").Value;
                             }
 
-                            IEnumerable<XElement> filters = element.ElementsAfterSelf("filter");                            
+                            //Extracting filter of the current Node
+                            IEnumerable<XElement> filters = element.ElementsAfterSelf("filter");
+
+                            //Iterating over all found filters to apply it to the datatable
                             foreach (XElement el in filters)
                             {
                                 foreach (var datafiltered in ApplyFilter(el, datatable))                                
@@ -77,15 +82,20 @@ namespace ETL
                     {
                         var CurrentFilter = row[i];
                         if (CurrentFilter.GetType() == typeof(String))
-                        { 
-                            var currentData = Data.AsEnumerable()
-                            .Where(r => r.Field<string>(element.Value.ToString()) == CurrentFilter.ToString().Trim())
-                            .CopyToDataTable();
-                            if (!bool.Parse(element.Attribute("includeInFile").Value.ToString()))
-                                currentData.Columns.RemoveAt(Int32.Parse(element.Attribute("field").Value) - 1);
-                            currentData.ExtendedProperties.Add("Path", GetPath(element, CurrentFilter.ToString().Trim()));
-                            currentData.ExtendedProperties.Add("FileName", Data.TableName);
-                            dataFiltered.Add(currentData);
+                        {
+                            var DataRow = Data.AsEnumerable()
+                            .Where(r => r.Field<string>(element.Value.ToString()) == CurrentFilter.ToString().Trim());
+                            if (DataRow.Count() > 0)
+                            {
+                                var currentData = DataRow.CopyToDataTable();
+                                if (!bool.Parse(element.Attribute("includeInFile").Value.ToString()))
+                                    currentData.Columns.RemoveAt(Int32.Parse(element.Attribute("field").Value) - 1);
+
+                                currentData.ExtendedProperties.Add("Path", GetPath(element, CurrentFilter.ToString().Trim()));
+                                currentData.ExtendedProperties.Add("FileName", Data.TableName);
+                                dataFiltered.Add(currentData);
+                            }
+                            
                         }
                         else
                         {
@@ -116,19 +126,27 @@ namespace ETL
     }
 }
 //<queriesLibrary>
+//	<!-- For filters the attribute "name" is required and it must be equal to the column name in the DB -->
 //	<filters>       
-//		<sql name = "seller" > select abbr from sellers</sql>        				
+//		<sql name = "customer" > select column0 from customers</sql>        				
 //	</filters>
 //	<queries>
-//        <query name = "items" >
-//            < sql > select itemid, skucode, seller from items</sql>
-//            <filter field = "3" includeInFile="false">seller</filter>
-//            <path filename = "items.csv" >/ public_html / ETL /{seller}/</path>
+//      <!-- The query node must have sql, filter and path children elements -->
+//		<query name = "items" >
+//          < !--The value of the SQL element must be the SQL Query -->
+//          <sql>select column0, column1, customer from items</sql>
+//			<!-- The attributes field and includeInFile are mandatory for filter,
+//          the name must be in the value section and it must be equal to the column name in the DB -->
+//			<filter field = "3" includeInFile= "true" > customer </ filter >
+
+//          < !--The attribute filename is mandatory, the value must be the current path
+//          the word in curly braces will be replaced by the values given by the filter of this query element -->
+//          <path filename = "items.csv" >/ public_html / ETL /{ customer}/</path>
 //        </query>        
-//        <query name = "providers" >
-//            < sql > select itemid, skucode, seller from items where balance &gt; 0 </sql>
-//            <filter field = "3" includeInFile="true">seller</filter>
-//            <path filename = "providers.csv" >/ public_html / ETL /{seller}/</path>
-//        </query>        
+//      <query name = "providers" >
+//          < sql > select column0, column1, customer from items where column3 &gt; 0 </sql>
+//          <filter field = "3" includeInFile="true">customer</filter>
+//          <path filename = "providers.csv" >/ public_html / ETL /{customer}/</path>
+//        </query>      
 //	</queries>
 //</queriesLibrary>

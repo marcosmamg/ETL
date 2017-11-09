@@ -9,6 +9,7 @@ namespace ETL
 {
     class Utilities
     {
+        //Method to log any error or completed action
         public static void Log(string message, string action = "")
         {
             if (action == "error")
@@ -30,6 +31,7 @@ namespace ETL
             Console.WriteLine(message);
             
         }
+        //Method to return Base directory of the execution file
         public static string BaseDirectory()
         {
             return AppDomain.CurrentDomain.BaseDirectory;

@@ -13,6 +13,13 @@ namespace ETL
         {            
             try
             {
+                //Validate parameters
+                if (args.Length > 0)
+                {
+                    Utilities.Log("This console application does not accept parameters", "error");
+                    Environment.Exit(1);
+                }
+
                 Console.WriteLine("Reading XML");
                 var queries= QueryBuilder.GetDataFromSQL();                
                 Console.WriteLine("Executing queries");               
@@ -26,14 +33,14 @@ namespace ETL
                         String FileName = query.ExtendedProperties["FileName"].ToString();
                         if (!CsvGenerator.GenerateCSV(query, Utilities.BaseDirectory() + FilePath, FileName))
                         {
-                            Utilities.Log("CSV Filed not generated", "error");
+                            Utilities.Log("CSV Filed not generated" + FilePath + FileName, "error");
                         }
                         Console.WriteLine("Uploading to FTP");
                         FTPClient myFtp = new FTPClient(ConfigurationManager.AppSettings["ftpUsername"], ConfigurationManager.AppSettings["ftpPassword"], ConfigurationManager.AppSettings["ftpURL"], ConfigurationManager.AppSettings["ftpPort"]);
                         FileStream file = new FileStream(Utilities.BaseDirectory() + FilePath + FileName, FileMode.Open, FileAccess.Read);
                         if (!myFtp.UploadFile(FilePath, FileName, file))
                         {
-                            Utilities.Log("File Upload failed", "error");
+                            Utilities.Log("File Upload failed" + FilePath + FileName, "error");
                         }
                     }                    
                 }

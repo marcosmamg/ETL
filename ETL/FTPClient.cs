@@ -25,7 +25,7 @@ namespace ETL
         {
             try
             {
-                // Get the object used to communicate with the server.                
+                //Build Full Path to upload file
                 string FullPath = URL + ':' + Port + '/' + Path;
                 
                 //Create Root Folder if does not exist
@@ -34,6 +34,7 @@ namespace ETL
                 //Create Path Folder for File if does not exist
                 CreateFolder(FullPath);
 
+                // Get the object used to communicate with the server.                
                 FtpWebRequest request = (FtpWebRequest)WebRequest.Create(FullPath +  FileName);
                 Console.WriteLine(URL + ':' + Port + Path + FileName);
                 request.Method = WebRequestMethods.Ftp.MakeDirectory;
@@ -57,7 +58,7 @@ namespace ETL
                 response.Close();
 
                 //Deleting File from File System
-                RemoveFile(Utilities.BaseDirectory() + Path + FileName);
+                //RemoveFile(Utilities.BaseDirectory() + Path + FileName);
                 return true;
             }
             catch (WebException e)
@@ -71,15 +72,18 @@ namespace ETL
                 return false;
             }
         }
-       
+
+        //Method to create folders if they do not exist
         private void CreateFolder(string FolderPath)
         {
             try
             {
-                Console.WriteLine(FolderPath);
+                //Request object to list folder
                 FtpWebRequest request = (FtpWebRequest)WebRequest.Create(FolderPath);
                 request.Method = WebRequestMethods.Ftp.ListDirectory;
                 request.Credentials = new NetworkCredential(UserName, Password);
+                
+                //Verifying if the folder was correctly listed
                 using (FtpWebResponse response = (FtpWebResponse)request.GetResponse())
                 {
                     Console.WriteLine("Root Folder already exist");
@@ -87,11 +91,14 @@ namespace ETL
             }
             catch (WebException ex)
             {
+                //Exception was raised and the folder must be created
                 if (ex.Response != null)
                 {
+                    //Request object to create folder if ActionNotTakenFileUnavailable is raised
                     FtpWebResponse response = (FtpWebResponse)ex.Response;
                     if (response.StatusCode == FtpStatusCode.ActionNotTakenFileUnavailable)
                     {
+                        //Create Folder
                         WebRequest requestRootFolder = WebRequest.Create(FolderPath);
                         requestRootFolder.Method = WebRequestMethods.Ftp.MakeDirectory;
                         requestRootFolder.Credentials = new NetworkCredential(UserName, Password);
@@ -101,11 +108,16 @@ namespace ETL
                             Utilities.Log("FTP Client:" + resp.StatusCode);
                         }
                     }
-                    Utilities.Log("FTP Client:" + ((FtpWebResponse)ex.Response).StatusDescription);
+                    else
+                    {
+                        Utilities.Log("FTP Client:" + ((FtpWebResponse)ex.Response).StatusDescription);
+                    }
+                    
                 }
             }
         }
-        public void RemoveFile(string FileName)
+        //Method to delete files from File System
+        private void RemoveFile(string FileName)
         {
             try
             {

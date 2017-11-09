@@ -20,19 +20,20 @@ namespace ETL
                 using (var textWriter = File.CreateText(Path + FileName))
                 using (var csv = new CsvWriter(textWriter))
                 {
+                    //Configuration of CSVWriter
                     csv.Configuration.QuoteNoFields = true;
                     csv.Configuration.Comment = '#';                    
                     csv.Configuration.SanitizeForInjection = false;
                     csv.Configuration.HasHeaderRecord = bool.Parse(ConfigurationManager.AppSettings["HasCSVHeader"]);
 
-                    // Write columns
+                    // Write columns to File
                     foreach (DataColumn column in DatafromSQl.Columns)
                     {
                         csv.WriteField(column.ColumnName);
                     }
                     csv.NextRecord();
 
-                    // Write row values
+                    // Write row values to File
                     foreach (DataRow row in DatafromSQl.Rows)
                     {
                         for (var i = 0; i < DatafromSQl.Columns.Count; i++)
