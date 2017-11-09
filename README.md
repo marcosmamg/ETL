@@ -3,7 +3,7 @@
 This project is a consoled application that uses C#. It reads an XML file where you define the queries and it will extract the information, convert to CSV and upload to a FTP.
 
 ## Define XML
-
+```xml
 <queriesLibrary>
 	<!-- For filters the attribute "name" is required and it must be equal to the column name in the DB -->
 	<filters>       
@@ -28,7 +28,7 @@ This project is a consoled application that uses C#. It reads an XML file where 
         </query>      
 	</queries>
 </queriesLibrary>
-
+```xml
 ## Usage
 *	Edit ETL.exe.config and set the values for the FTP and the ODBC Connection
 *   Make sure the XML file is on the root of the .exe
