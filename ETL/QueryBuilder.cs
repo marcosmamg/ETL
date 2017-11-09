@@ -72,6 +72,7 @@ namespace ETL
 
         private static List<DataTable> ApplyFilter(XElement element, DataTable Data)
         {
+            //Getting data of filters, the element value is used to get the query from filters node
             List<DataTable> filters = GetDataForFilters(element.Value.ToString());
             List<DataTable> dataFiltered = new List<DataTable>();
             foreach (var filter in filters)
