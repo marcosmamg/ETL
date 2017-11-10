@@ -13,11 +13,12 @@ namespace ETL
         {            
             try
             {
+                String FilePath = "";
+                String FileName = "";
                 //Validate parameters
                 if (args.Length > 0)
                 {
-                    Utilities.Log("This console application does not accept parameters", "error");
-                    Environment.Exit(1);
+                    Utilities.Log("This console application does not accept parameters, avoid using them", "error");                    
                 }
 
                 Console.WriteLine("Reading XML");
@@ -29,8 +30,8 @@ namespace ETL
                     Console.WriteLine("Generating CSV");                    
                     foreach (var query in queries)
                     {                        
-                        String FilePath  = query.ExtendedProperties["Path"].ToString();
-                        String FileName = query.ExtendedProperties["FileName"].ToString();
+                        FilePath  = query.ExtendedProperties["Path"].ToString();
+                        FileName = query.ExtendedProperties["FileName"].ToString();
                         if (!CsvGenerator.GenerateCSV(query, Utilities.BaseDirectory() + FilePath, FileName))
                         {
                             Utilities.Log("CSV Filed not generated" + FilePath + FileName, "error");
@@ -46,8 +47,12 @@ namespace ETL
                 }
                 else
                 {
-                    Utilities.Log("SQL Query returned no results", "error");
-                }   
+                    Utilities.Log("SQL Queries returned no results", "error");
+                }
+                
+                //Deleting tree of files
+                Utilities.RemoveFromFileSystem(Utilities.BaseDirectory() + FilePath.Split('/')[1], "directory");
+
                 Utilities.Log("Process completed succesfully");                
                 Environment.Exit(0);
             }

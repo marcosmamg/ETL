@@ -36,5 +36,28 @@ namespace ETL
         {
             return AppDomain.CurrentDomain.BaseDirectory;
         }
+
+        //Method to delete files from File System
+        public static void RemoveFromFileSystem(string Path, string action)
+        {
+            try
+            {
+                switch (action)
+                {
+                    case "file":
+                        File.Delete(Path);
+                        break;
+
+                    case "directory":
+                        Directory.Delete(Path, true);
+                        break;
+                }                
+            }
+            catch (Exception ex)
+            {
+                Utilities.Log("FTP Client:" + ex.Message.ToString() + ex.ToString(), "error");
+            }
+
+        }
     }
 }

@@ -29,7 +29,7 @@ namespace ETL
                 string FullPath = URL + ':' + Port + '/' + Path;
                 
                 //TODO: Create Path Folder for File if does not exist (levels?)
-                CreateFolder(FullPath);
+                CreateFolder(FullPath, Path);
 
                 // Get the object used to communicate with the server.                
                 FtpWebRequest request = (FtpWebRequest)WebRequest.Create(FullPath +  FileName);
@@ -54,8 +54,8 @@ namespace ETL
                 Utilities.Log("Upload File Complete, status:" + response.StatusDescription);
                 response.Close();
 
-                //Deleting File from File System
-                //RemoveFile(Utilities.BaseDirectory() + Path + FileName);
+                //Deleting Directory from File System                
+                Utilities.RemoveFromFileSystem(Utilities.BaseDirectory() + Path + FileName, "file");
                 return true;
             }
             catch (WebException e)
@@ -71,60 +71,58 @@ namespace ETL
         }
 
         //Method to create folders if they do not exist
-        private void CreateFolder(string FolderPath)
+        private void CreateFolder(string FullPath, string RelativePath)
+        {
+            string[] folderArray = RelativePath.Split('/');
+            string folderName = "";
+            try
+            {                
+                for (int i = 0; i < folderArray.Length; i++)
+                {
+                    if (!string.IsNullOrEmpty(folderArray[i]))
+                    {
+
+                        folderName = string.IsNullOrEmpty(folderName) ? folderArray[i] : folderName + "/" + folderArray[i] + "/";
+                        if (!CheckIfFolderExists(URL + ":" + Port + "/" + folderName))
+                        {
+                            //Create Folder
+                            WebRequest requestRootFolder = WebRequest.Create(URL + ":" + Port + "/" + folderName);
+                            requestRootFolder.Method = WebRequestMethods.Ftp.MakeDirectory;
+                            requestRootFolder.Credentials = new NetworkCredential(UserName, Password);
+                            using (var resp = (FtpWebResponse)requestRootFolder.GetResponse())
+                            {
+                                Console.WriteLine(resp.StatusCode);
+                                Utilities.Log("FTP Client:" + resp.StatusCode);
+                            }
+                        }
+                    }
+                }                
+            }
+            catch (WebException ex)
+            {
+                Utilities.Log("FTP Client:" + ((FtpWebResponse)ex.Response).StatusDescription);                               
+            }
+        }
+
+        private bool CheckIfFolderExists(string Path)
         {
             try
             {
                 //Request object to list folder
-                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(FolderPath);
+                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(Path);
                 request.Method = WebRequestMethods.Ftp.ListDirectory;
                 request.Credentials = new NetworkCredential(UserName, Password);
-                
                 //Verifying if the folder was correctly listed
                 using (FtpWebResponse response = (FtpWebResponse)request.GetResponse())
-                {
-                    Console.WriteLine("Folder already exist");
+                {                    
+                    return true;
                 }
             }
-            catch (WebException ex)
+            catch
             {
-                //Exception was raised and the folder must be created
-                if (ex.Response != null)
-                {
-                    //Request object to create folder if ActionNotTakenFileUnavailable is raised
-                    FtpWebResponse response = (FtpWebResponse)ex.Response;
-                    if (response.StatusCode == FtpStatusCode.ActionNotTakenFileUnavailable)
-                    {
-                        //Create Folder
-                        WebRequest requestRootFolder = WebRequest.Create(FolderPath);
-                        requestRootFolder.Method = WebRequestMethods.Ftp.MakeDirectory;
-                        requestRootFolder.Credentials = new NetworkCredential(UserName, Password);
-                        using (var resp = (FtpWebResponse)requestRootFolder.GetResponse())
-                        {
-                            Console.WriteLine(resp.StatusCode);
-                            Utilities.Log("FTP Client:" + resp.StatusCode);
-                        }
-                    }
-                    else
-                    {
-                        Utilities.Log("FTP Client:" + ((FtpWebResponse)ex.Response).StatusDescription);
-                    }
-
-                }
+                return false;
             }
-        }
-        //Method to delete files from File System
-        private void RemoveFile(string FileName)
-        {
-            try
-            {
-                File.Delete(FileName);
-            }
-            catch (Exception ex)
-            {
-                Utilities.Log("FTP Client:" + ex.Message.ToString() + ex.ToString(), "error");                
-            }
-
-        }
+            
+        }        
     }
 }

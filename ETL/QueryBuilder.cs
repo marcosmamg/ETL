@@ -37,12 +37,22 @@ namespace ETL
                             //Extracting filter of the current Node
                             IEnumerable<XElement> filters = element.ElementsAfterSelf("filter");
 
-                            //Iterating over all found filters to apply it to the datatable
-                            foreach (XElement el in filters)
+                            if (filters.Count() > 0)
                             {
-                                foreach (var datafiltered in ApplyFilter(el, datatable))                                
-                                queries.Add(datafiltered);
+                                //Iterating over all found filters to apply it to the datatable
+                                foreach (XElement el in filters)
+                                {
+                                    foreach (var datafiltered in ApplyFilter(el, datatable))
+                                        queries.Add(datafiltered);
+                                }
                             }
+                            else
+                            {
+                                //return data without filter
+                                datatable.ExtendedProperties.Add("Path", GetPath(element));
+                                datatable.ExtendedProperties.Add("FileName", datatable.TableName);
+                                queries.Add(datatable);
+                            }                        
                             break;
                     }
                 }               
@@ -91,7 +101,7 @@ namespace ETL
                             {
                                 var currentData = DataRow.CopyToDataTable();
                                 //TODO: create a function to validate inculdeinfile and manage excepion
-                                if (IncludeColumnInFile(element))
+                                if (!IncludeColumnInFile(element))
                                     currentData.Columns.Remove(element.Attribute("field").Value.ToString());
 
                                 currentData.ExtendedProperties.Add("Path", GetPath(element, CurrentFilter.ToString().Trim()));
@@ -124,7 +134,7 @@ namespace ETL
             }
             
         }
-        private static String GetPath(XElement element, String Filter)
+        private static String GetPath(XElement element, String Filter = null)
         {
             String Path = null;
             IEnumerable<XElement> paths = element.ElementsAfterSelf("path");
@@ -132,8 +142,16 @@ namespace ETL
             {
                 Path = el.Value;
             }
-            Regex rgx = new Regex("\\{\\w+\\}");            
-            return rgx.Replace(Path, Filter);
+            if (Filter != null)
+            {
+                Regex rgx = new Regex("\\{\\w+\\}");
+                return rgx.Replace(Path, Filter);
+            }
+            else
+            {
+                return Path;
+            }
+            
         }
              
 
