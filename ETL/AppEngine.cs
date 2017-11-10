@@ -22,7 +22,7 @@ namespace ETL
                 }
 
                 Console.WriteLine("Reading XML");
-                var queries= QueryBuilder.GetDataFromSQL();                
+                var queries= QueryBuilder.GetDataFromSQLFiles();                
                 Console.WriteLine("Executing queries");               
                 
                 if (queries.Count > 0)
@@ -32,17 +32,20 @@ namespace ETL
                     {                        
                         FilePath  = query.ExtendedProperties["Path"].ToString();
                         FileName = query.ExtendedProperties["FileName"].ToString();
-                        if (!CsvGenerator.GenerateCSV(query, Utilities.BaseDirectory() + FilePath, FileName))
+                        var file = CsvGenerator.GenerateCSV(query, FileName);
+                        if (file == null)
                         {
                             Utilities.Log("CSV Filed not generated" + FilePath + FileName, "error");
                         }
-                        Console.WriteLine("Uploading to FTP");
-                        FTPClient myFtp = new FTPClient(ConfigurationManager.AppSettings["ftpUsername"], ConfigurationManager.AppSettings["ftpPassword"], ConfigurationManager.AppSettings["ftpURL"], ConfigurationManager.AppSettings["ftpPort"]);
-                        FileStream file = new FileStream(Utilities.BaseDirectory() + FilePath + FileName, FileMode.Open, FileAccess.Read);
-                        if (!myFtp.UploadFile(FilePath, FileName, file))
+                        else
                         {
-                            Utilities.Log("File Upload failed" + FilePath + FileName, "error");
-                        }
+                            Console.WriteLine("Uploading to FTP");
+                            FTPClient myFtp = new FTPClient(ConfigurationManager.AppSettings["ftpUsername"], ConfigurationManager.AppSettings["ftpPassword"], ConfigurationManager.AppSettings["ftpURL"], ConfigurationManager.AppSettings["ftpPort"]);
+                            if (!myFtp.UploadFile(FilePath, FileName, file))
+                            {
+                                Utilities.Log("File Upload failed" + FilePath + FileName, "error");
+                            }
+                        } 
                     }                    
                 }
                 else
@@ -50,11 +53,9 @@ namespace ETL
                     Utilities.Log("SQL Queries returned no results", "error");
                 }
                 
-                //Deleting tree of files
-                Utilities.RemoveFromFileSystem(Utilities.BaseDirectory() + FilePath.Split('/')[1], "directory");
-
-                Utilities.Log("Process completed succesfully");                
-                Environment.Exit(0);
+                Utilities.Log("Process completed succesfully");
+                Console.ReadLine();
+                //Environment.Exit(0);
             }
             catch (Exception ex)
             {

@@ -14,7 +14,7 @@ namespace ETL
         private static XElement doc = XElement.Load(Utilities.BaseDirectory() + "queries.xml");
         
         //Method to get Data from SQL Queries configured in XML File
-        public static List<DataTable> GetDataFromSQL()
+        public static List<DataTable> GetDataFromSQLFiles()
         {
             List<DataTable> queries = new List<DataTable>();
             try

@@ -20,14 +20,15 @@ namespace ETL
             URL = _URL;
             Port = _port;
         }
-        // Method receives file to upload it to a given path in the FTP defined in the AppConfig File
-        public Boolean UploadFile(string Path, string FileName, FileStream File)
+        // Method receives file stream to upload it to a given path in the FTP defined in the AppConfig File
+        public Boolean UploadFile(string Path, string FileName, MemoryStream File)
         {
             try
             {
                 //Build Full Path to upload file
                 string FullPath = URL + ':' + Port + '/' + Path;
-                
+                URL = URL + ":" + Port + "/";
+
                 //TODO: Create Path Folder for File if does not exist (levels?)
                 CreateFolder(FullPath, Path);
 
@@ -53,9 +54,7 @@ namespace ETL
                 FtpWebResponse response = (FtpWebResponse)request.GetResponse();                
                 Utilities.Log("Upload File Complete, status:" + response.StatusDescription);
                 response.Close();
-
-                //Deleting Directory from File System                
-                Utilities.RemoveFromFileSystem(Utilities.BaseDirectory() + Path + FileName, "file");
+                                
                 return true;
             }
             catch (WebException e)
@@ -83,10 +82,10 @@ namespace ETL
                     {
 
                         folderName = string.IsNullOrEmpty(folderName) ? folderArray[i] : folderName + "/" + folderArray[i] + "/";
-                        if (!CheckIfFolderExists(URL + ":" + Port + "/" + folderName))
+                        if (!CheckIfFolderExists(URL + folderName))
                         {
                             //Create Folder
-                            WebRequest requestRootFolder = WebRequest.Create(URL + ":" + Port + "/" + folderName);
+                            WebRequest requestRootFolder = WebRequest.Create(URL + folderName);
                             requestRootFolder.Method = WebRequestMethods.Ftp.MakeDirectory;
                             requestRootFolder.Credentials = new NetworkCredential(UserName, Password);
                             using (var resp = (FtpWebResponse)requestRootFolder.GetResponse())
