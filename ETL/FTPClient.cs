@@ -30,7 +30,7 @@ namespace ETL
                 URL = URL + ":" + Port + "/";
 
                 //TODO: Create Path Folder for File if does not exist (levels?)
-                CreateFolder(FullPath, Path);
+                CreateFolder(Path);
 
                 // Get the object used to communicate with the server.                
                 FtpWebRequest request = (FtpWebRequest)WebRequest.Create(FullPath +  FileName);
@@ -70,7 +70,7 @@ namespace ETL
         }
 
         //Method to create folders if they do not exist
-        private void CreateFolder(string FullPath, string RelativePath)
+        private void CreateFolder(string RelativePath)
         {
             string[] folderArray = RelativePath.Split('/');
             string folderName = "";

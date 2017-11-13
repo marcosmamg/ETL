@@ -10,7 +10,7 @@ namespace ETL
     public class CsvGenerator
     {
         //Method that generates CSV File from SQLDatareader
-        public static MemoryStream GenerateCSV(DataTable DatafromSQl, string FileName)
+        public static MemoryStream GenerateCSV(DataTable DatafromSQl, string FileName, bool HasCSVHeader)
         {
             var memoryStream = new MemoryStream();
             try
@@ -22,7 +22,7 @@ namespace ETL
                 csv.Configuration.QuoteNoFields = true;
                 csv.Configuration.Comment = '#';                    
                 csv.Configuration.SanitizeForInjection = false;
-                csv.Configuration.HasHeaderRecord = bool.Parse(ConfigurationManager.AppSettings["HasCSVHeader"]);
+                csv.Configuration.HasHeaderRecord =HasCSVHeader;
 
                 if (csv.Configuration.HasHeaderRecord)
                 {
