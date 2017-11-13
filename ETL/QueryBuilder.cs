@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
@@ -18,109 +19,26 @@ namespace ETL
         {
             List<DataTable> queries = new List<DataTable>();
             try
-            {                
+            {
                 //Extracting queries with no filters yet from XML
-                foreach (XElement element in doc.XPathSelectElement("//queries").Descendants())
+                string[] files = Directory.GetFiles(Utilities.BaseDirectory() + "queries\\", "*.sql", SearchOption.TopDirectoryOnly);
+                foreach (var file in files)
                 {
-                    switch (element.Name.ToString(
-                        ))
-                    {
-                        case "sql":
-                            var datatable= DBClient.getQueryResultset(element.Value);
+                    var datatable = DBClient.getQueryResultset(File.ReadAllText(file));                    
+                    queries.Add(datatable);
+                }
+                if (queries.Count() == 0)
+                {
+                    Utilities.Log("Query Builder, status: Queries returned no result", "error");
+                }
 
-                            IEnumerable<XElement> path = element.ElementsAfterSelf("path");
-                            foreach (XElement el in path)
-                            {
-                                datatable.TableName = el.Attribute("filename").Value;
-                            }
-
-                            //Extracting filter of the current Node
-                            IEnumerable<XElement> filters = element.ElementsAfterSelf("filter");
-
-                            if (filters.Count() > 0)
-                            {
-                                //Iterating over all found filters to apply it to the datatable
-                                foreach (XElement el in filters)
-                                {
-                                    foreach (var datafiltered in ApplyFilter(el, datatable))
-                                        queries.Add(datafiltered);
-                                }
-                            }
-                            else
-                            {
-                                //return data without filter
-                                datatable.ExtendedProperties.Add("Path", GetPath(element));
-                                datatable.ExtendedProperties.Add("FileName", datatable.TableName);
-                                queries.Add(datatable);
-                            }                        
-                            break;
-                    }
-                }               
-                return queries;
+                return queries;                
             }
             catch (Exception ex)
             {
                 Utilities.Log("Query Builder, status:" + ex.Message.ToString() + ex.ToString(), "error");
                 return queries;
             }
-        }
-        private static List<DataTable> GetDataForFilters(String FilterName)
-        {
-            List<DataTable> FiltersData = new List<DataTable>();
-
-            //Extracting Filters            
-            IEnumerable<XElement> filters =
-                from el in doc.Elements("filters").Descendants()
-                where (string)el.Attribute("name") == FilterName
-                select el;
-
-            foreach (XElement el in filters)
-                FiltersData.Add(DBClient.getQueryResultset(el.Value));
-
-            return FiltersData;
-        }
-
-        private static List<DataTable> ApplyFilter(XElement element, DataTable Data)
-        {
-            //Getting data of filters, the element value is used to get the query from filters node
-            List<DataTable> filters = GetDataForFilters(element.Value.ToString());
-            List<DataTable> dataFiltered = new List<DataTable>();
-            foreach (var filter in filters)
-            {
-                foreach (DataRow row in filter.Rows)
-                {                    
-                    for (var i = 0; i < filter.Columns.Count; i++)
-                    {
-                        var CurrentFilter = row[i];
-                        if (CurrentFilter.GetType() == typeof(String))
-                        {
-                            //Compare with attibute
-                            var DataRow = Data.AsEnumerable()
-                            .Where(r => r.Field<string>(element.Attribute("field").Value.ToString()) == CurrentFilter.ToString().Trim());
-                            if (DataRow.Count() > 0)
-                            {
-                                var currentData = DataRow.CopyToDataTable();
-                                //TODO: create a function to validate inculdeinfile and manage excepion
-                                if (!IncludeColumnInFile(element))
-                                    currentData.Columns.Remove(element.Attribute("field").Value.ToString());
-
-                                currentData.ExtendedProperties.Add("Path", GetPath(element, CurrentFilter.ToString().Trim()));
-                                currentData.ExtendedProperties.Add("FileName", Data.TableName);
-                                dataFiltered.Add(currentData);
-                            }
-                            
-                        }
-                        else
-                        {
-                            dataFiltered.Add(Data.AsEnumerable()
-                            .Where(r => r.Field<dynamic>(element.Value.ToString()) == CurrentFilter)
-                            .CopyToDataTable());
-                        }
-
-                    }
-                }                
-            }
-            return dataFiltered;
         }
         private static bool IncludeColumnInFile(XElement element)
         {
@@ -134,24 +52,10 @@ namespace ETL
             }
             
         }
-        private static String GetPath(XElement element, String Filter = null)
+        private static String GetPath(DataTable datatable)
         {
-            String Path = null;
-            IEnumerable<XElement> paths = element.ElementsAfterSelf("path");
-            foreach (XElement el in paths)
-            {
-                Path = el.Value;
-            }
-            if (Filter != null)
-            {
-                Regex rgx = new Regex("\\{\\w+\\}");
-                return rgx.Replace(Path, Filter);
-            }
-            else
-            {
-                return Path;
-            }
-            
+            DataRow row = datatable.Rows[0];
+            return row["path"].ToString();
         }
              
 

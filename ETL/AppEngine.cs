@@ -13,46 +13,52 @@ namespace ETL
         {            
             try
             {
-                String FilePath = "";
-                String FileName = "";
+                string FilePath = "";
+                string FileName = "";
+                string FTPUsername = "";
+                string FTPPassword = "";
+                string FTPURL = "";
+                string FTPPort = "";
+                bool HasCSVHeader = false;
                 //Validate parameters
-                if (args.Length > 0)
+                if (args.Length == 5)
                 {
-                    Utilities.Log("This console application does not accept parameters, avoid using them", "error");                    
-                }
-
-                Console.WriteLine("Reading XML");
-                var queries= QueryBuilder.GetDataFromSQLFiles();                
-                Console.WriteLine("Executing queries");               
-                
-                if (queries.Count > 0)
-                {
-                    Console.WriteLine("Generating CSV");                    
-                    foreach (var query in queries)
-                    {                        
-                        FilePath  = query.ExtendedProperties["Path"].ToString();
-                        FileName = query.ExtendedProperties["FileName"].ToString();
-                        var file = CsvGenerator.GenerateCSV(query, FileName);
-                        if (file == null)
-                        {
-                            Utilities.Log("CSV Filed not generated" + FilePath + FileName, "error");
-                        }
-                        else
-                        {
-                            Console.WriteLine("Uploading to FTP");
-                            FTPClient myFtp = new FTPClient(ConfigurationManager.AppSettings["ftpUsername"], ConfigurationManager.AppSettings["ftpPassword"], ConfigurationManager.AppSettings["ftpURL"], ConfigurationManager.AppSettings["ftpPort"]);
-                            if (!myFtp.UploadFile(FilePath, FileName, file))
-                            {
-                                Utilities.Log("File Upload failed" + FilePath + FileName, "error");
-                            }
-                        } 
-                    }                    
+                    FTPUsername = args[0];
+                    FTPPassword = args[1];
+                    FTPURL = args[2];
+                    FTPPort = args[3];
+                    HasCSVHeader = bool.Parse(args[4]);
                 }
                 else
                 {
-                    Utilities.Log("SQL Queries returned no results", "error");
+                    Utilities.Log("Invalid number of parameters to execute task", "error");
+                    Environment.Exit(1);
                 }
+
+                Console.WriteLine("Reading SQL File(s) and getting Data");                
+                var queries= QueryBuilder.GetDataFromSQLFiles();
                 
+                foreach (var query in queries)
+                {
+                    Console.WriteLine("Generating CSV");
+                    FilePath = query.Rows[0]["path"].ToString();
+                    FileName = query.Rows[0]["fileName"].ToString();
+                    var file = CsvGenerator.GenerateCSV(query, FileName, HasCSVHeader);
+                    if (file == null)
+                    {
+                        Utilities.Log("CSV Filed not generated" + FilePath + FileName, "error");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Uploading to FTP");
+                        FTPClient myFtp = new FTPClient(FTPUsername, FTPPassword, FTPURL, FTPPort);
+                        if (!myFtp.UploadFile(FilePath, FileName, file))
+                        {
+                            Utilities.Log("File Upload failed" + FilePath + FileName, "error");
+                        }
+                    }
+                }
+
                 Utilities.Log("Process completed succesfully");
                 Console.ReadLine();
                 //Environment.Exit(0);
