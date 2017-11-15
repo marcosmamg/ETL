@@ -3,6 +3,7 @@ using System.IO;
 using System.Configuration;
 using System.Data;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ETL
 {     
@@ -13,8 +14,6 @@ namespace ETL
         {            
             try
             {
-                string FilePath = "";
-                string FileName = "";
                 string FTPUsername = "";
                 string FTPPassword = "";
                 string FTPURL = "";
@@ -34,31 +33,22 @@ namespace ETL
                     Utilities.Log("Invalid number of parameters to execute task", "error");
                     Environment.Exit(1);
                 }
-
                 Console.WriteLine("Reading SQL File(s) and getting Data");                
-                var queries= QueryBuilder.GetDataFromSQLFiles();
-                
+                var queries= QueryBuilder.GetDataFromSQLFiles();                
                 foreach (var query in queries)
                 {
-                    Console.WriteLine("Generating CSV");
-                    FilePath = query.Rows[0]["path"].ToString();
-                    FileName = query.Rows[0]["fileName"].ToString();
-                    var file = CsvGenerator.GenerateCSV(query, FileName, HasCSVHeader);
-                    if (file == null)
+                    var FilePaths = (from row in query.AsEnumerable()
+                                     select row.Field<string>("Path")).Distinct().ToList();
+                    foreach (var Path in FilePaths)
                     {
-                        Utilities.Log("CSV Filed not generated" + FilePath + FileName, "error");
-                    }
-                    else
-                    {
+                        Console.WriteLine("Generating CSV");
+                        var QueryFiltered = query.AsEnumerable().Where(row => row.Field<string>("Path") == Path);
+                        var file = CsvGenerator.GenerateCSV(QueryFiltered.CopyToDataTable(), HasCSVHeader);
                         Console.WriteLine("Uploading to FTP");
                         FTPClient myFtp = new FTPClient(FTPUsername, FTPPassword, FTPURL, FTPPort);
-                        if (!myFtp.UploadFile(FilePath, FileName, file))
-                        {
-                            Utilities.Log("File Upload failed" + FilePath + FileName, "error");
-                        }
-                    }
+                        myFtp.UploadFile(file, Path, query.Rows[0]["FileName"].ToString());
+                    }                    
                 }
-
                 Utilities.Log("Process completed succesfully");
                 Console.ReadLine();
                 //Environment.Exit(0);

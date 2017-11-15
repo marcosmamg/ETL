@@ -1,16 +1,14 @@
-﻿using System.Data.SqlClient;
-using CsvHelper;
+﻿using CsvHelper;
 using System.IO;
 using System;
 using System.Data;
-using System.Configuration;
 
 namespace ETL
 {
     public class CsvGenerator
     {
         //Method that generates CSV File from SQLDatareader
-        public static MemoryStream GenerateCSV(DataTable DatafromSQl, string FileName, bool HasCSVHeader)
+        public static MemoryStream GenerateCSV(DataTable DatafromSQL, bool HasCSVHeader)
         {
             var memoryStream = new MemoryStream();
             try
@@ -23,20 +21,18 @@ namespace ETL
                 csv.Configuration.Comment = '#';                    
                 csv.Configuration.SanitizeForInjection = false;
                 csv.Configuration.HasHeaderRecord =HasCSVHeader;
-
                 if (csv.Configuration.HasHeaderRecord)
                 {
-                    foreach (DataColumn column in DatafromSQl.Columns)
+                    foreach (DataColumn column in DatafromSQL.Columns)
                     {
                         csv.WriteField(column.ColumnName);
                     }
                     csv.NextRecord();
-                }                  
-
+                }
                 // Write row values to File
-                foreach (DataRow row in DatafromSQl.Rows)
+                foreach (DataRow row in DatafromSQL.Rows)
                 {
-                    for (var i = 0; i < DatafromSQl.Columns.Count; i++)
+                    for (var i = 0; i < DatafromSQL.Columns.Count; i++)
                     {
                         csv.WriteField(row[i]);
                     }
@@ -44,8 +40,7 @@ namespace ETL
                 }
                 streamWriter.Flush();
                 memoryStream.Position = 0;
-                return memoryStream;
-                
+                return memoryStream;                
             }
             catch (Exception ex)
             {
@@ -54,6 +49,4 @@ namespace ETL
             }
         }
     }
-
-
 }

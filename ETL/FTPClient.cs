@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -21,40 +20,34 @@ namespace ETL
             Port = _port;
         }
         // Method receives file stream to upload it to a given path in the FTP defined in the AppConfig File
-        public Boolean UploadFile(string Path, string FileName, MemoryStream File)
+        public Boolean UploadFile(MemoryStream File, string Path, string FileName)
         {
             try
             {
                 //Build Full Path to upload file
-                string FullPath = URL + ':' + Port + '/' + Path;
+                string FullPath = URL + ':' + Port + '/' + Path + '/';
                 URL = URL + ":" + Port + "/";
-
-                //TODO: Create Path Folder for File if does not exist (levels?)
+                //Create Path Folder for File if does not exist
                 CreateFolder(Path);
-
                 // Get the object used to communicate with the server.                
                 FtpWebRequest request = (FtpWebRequest)WebRequest.Create(FullPath +  FileName);
                 Console.WriteLine(URL + ':' + Port + Path + FileName);
                 request.Method = WebRequestMethods.Ftp.MakeDirectory;
                 request.Method = WebRequestMethods.Ftp.UploadFile;                
                 request.Credentials = new NetworkCredential(UserName, Password);
-
                 // Copy the contents of the file to the request stream.  
                 StreamReader sourceStream = new StreamReader(File);
                 byte[] fileContents = Encoding.UTF8.GetBytes(sourceStream.ReadToEnd());
                 sourceStream.Close();
                 request.ContentLength = fileContents.Length;
-
                 //Preparing stream to upload to FTP
                 Stream requestStream = request.GetRequestStream();
                 requestStream.Write(fileContents, 0, fileContents.Length);
-                requestStream.Close();
-                
+                requestStream.Close();                
                 //Uploading File
                 FtpWebResponse response = (FtpWebResponse)request.GetResponse();                
                 Utilities.Log("Upload File Complete, status:" + response.StatusDescription);
-                response.Close();
-                                
+                response.Close();                                
                 return true;
             }
             catch (WebException e)

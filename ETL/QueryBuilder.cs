@@ -39,25 +39,6 @@ namespace ETL
                 Utilities.Log("Query Builder, status:" + ex.Message.ToString() + ex.ToString(), "error");
                 return queries;
             }
-        }
-        private static bool IncludeColumnInFile(XElement element)
-        {
-            try
-            {
-                return bool.Parse(element.Attribute("includeInFile").Value.ToString());
-            }
-            catch
-            {
-                return false;
-            }
-            
-        }
-        private static String GetPath(DataTable datatable)
-        {
-            DataRow row = datatable.Rows[0];
-            return row["path"].ToString();
-        }
-             
-
+        }       
     }
 }
