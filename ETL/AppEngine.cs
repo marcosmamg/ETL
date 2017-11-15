@@ -1,8 +1,6 @@
 ﻿using System;
-using System.IO;
-using System.Configuration;
-using System.Data;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 
 namespace ETL
@@ -34,7 +32,7 @@ namespace ETL
                     Environment.Exit(1);
                 }
                 Console.WriteLine("Reading SQL File(s) and getting Data");                
-                var queries= QueryBuilder.GetDataFromSQLFiles();                
+                List<DataTable> queries= QueryBuilder.GetDataFromSQLFiles();                
                 foreach (var query in queries)
                 {
                     var FilePaths = (from row in query.AsEnumerable()
@@ -55,7 +53,6 @@ namespace ETL
             }
             catch (Exception ex)
             {
-
                 Utilities.Log(ex.Message.ToString() + ex.ToString(), "error");
                 Environment.Exit(1);
             }

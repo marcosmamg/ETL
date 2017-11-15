@@ -2,7 +2,6 @@
 using System.Configuration;
 using System.Data;
 using System.Data.Odbc;
-using System.Data.SqlClient;
 
 namespace ETL
 {
@@ -23,7 +22,6 @@ namespace ETL
                 Environment.Exit(1);
             }
         }
-
         //Method that executes SQL statements, but not stored procedures
         public static DataTable getQueryResultset(string query)
         {

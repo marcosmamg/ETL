@@ -10,9 +10,9 @@ namespace ETL
         public string Password { get; set; }
         public string URL { get; set; }
         public string Port { get; set; }
-
+        public const string PORT_CONSTANT = "21";
         //Initilizes FTPClient
-        public FTPClient(string _userName, string _password, string _URL, string _port = "21")
+        public FTPClient(string _userName, string _password, string _URL, string _port = PORT_CONSTANT)
         {
             UserName = _userName;
             Password = _password;
@@ -61,7 +61,6 @@ namespace ETL
                 return false;
             }
         }
-
         //Method to create folders if they do not exist
         private void CreateFolder(string RelativePath)
         {
@@ -95,7 +94,6 @@ namespace ETL
                 Utilities.Log("FTP Client:" + ((FtpWebResponse)ex.Response).StatusDescription);                               
             }
         }
-
         private bool CheckIfFolderExists(string Path)
         {
             try
@@ -113,8 +111,7 @@ namespace ETL
             catch
             {
                 return false;
-            }
-            
+            }            
         }        
     }
 }
