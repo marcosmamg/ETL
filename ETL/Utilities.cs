@@ -23,14 +23,12 @@ namespace ETL
                     outputFile.WriteLine(System.DateTime.Now.ToString() + ':' + message);
                 }
             }
-            Console.WriteLine(message);
-            
+            Console.WriteLine(message);            
         }
         //Method to return Base directory of the execution file
         public static string BaseDirectory()
         {
             return AppDomain.CurrentDomain.BaseDirectory;
-        }
-       
+        }       
     }
 }

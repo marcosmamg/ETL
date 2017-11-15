@@ -20,7 +20,7 @@ namespace ETL
                 csv.Configuration.QuoteNoFields = true;
                 csv.Configuration.Comment = '#';                    
                 csv.Configuration.SanitizeForInjection = false;
-                csv.Configuration.HasHeaderRecord =HasCSVHeader;
+                csv.Configuration.HasHeaderRecord = HasCSVHeader;
                 if (csv.Configuration.HasHeaderRecord)
                 {
                     foreach (DataColumn column in DatafromSQL.Columns)
@@ -39,6 +39,7 @@ namespace ETL
                     csv.NextRecord();
                 }
                 streamWriter.Flush();
+                //Allowing Stream to be readable outside
                 memoryStream.Position = 0;
                 return memoryStream;                
             }
