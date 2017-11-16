@@ -5,7 +5,7 @@ using System.Data.Odbc;
 
 namespace ETL
 {
-    public class DBClient
+    public static class DBClient
     {
         private static ConnectionStringSettings strConnection = ConfigurationManager.ConnectionStrings["ETL"];
         // Method to open DB Connection
@@ -23,7 +23,7 @@ namespace ETL
             }
         }
         //Method that executes SQL statements, but not stored procedures
-        public static DataTable getQueryResultset(string query)
+        public static DataTable GetQueryResultset(string query)
         {
             OdbcConnection sqlConnection = null;
             DataSet dataset = new DataSet();

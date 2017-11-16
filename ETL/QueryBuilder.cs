@@ -8,25 +8,40 @@ namespace ETL
 {
     class QueryBuilder
     {
-        //Method to get Data from SQL Queries configured in XML File
-        public static List<DataTable> GetDataFromSQLFiles()
+        private const string QUERIES_FOLDER = "queries\\";
+        private const string FILE_TYPE = "*.sql";
+        public static List<DataTable> GetData()
         {
-            List<DataTable> queries = new List<DataTable>();
+            List<DataTable> data = new List<DataTable>();
+            List<string> queries = new List<string>();
+            try
+            {
+                queries = GetSQLQueries();
+                foreach (var query in queries)
+                {
+                    data.Add(DBClient.GetQueryResultset(query));
+                }
+                return data;
+            }
+            catch (Exception ex)
+            {
+                Utilities.Log("Query Builder, status:" + ex.Message.ToString() + ex.ToString(), "error");
+                return data;
+            }
+        }
+
+        private static List<string> GetSQLQueries()
+        {
+            List<string> queries = new List<string>();
             try
             {
                 //Extracting queries from sql files
-                string[] files = Directory.GetFiles(Utilities.BaseDirectory() + "queries\\", "*.sql", SearchOption.TopDirectoryOnly);
-                foreach (var file in files)
-                {
-                    //Obtaining Data from sql
-                    var datatable = DBClient.getQueryResultset(File.ReadAllText(file));                    
-                    queries.Add(datatable);
-                }
-                if (queries.Count() == 0)
-                {
-                    Utilities.Log("Query Builder, status: Queries returned no result", "error");
-                }
+                string[] files = Directory.GetFiles(Utilities.BaseDirectory() + QUERIES_FOLDER, FILE_TYPE, SearchOption.TopDirectoryOnly);
 
+                foreach (var file in files)
+                {                    
+                    queries.Add(File.ReadAllText(file));                    
+                }              
                 return queries;                
             }
             catch (Exception ex)

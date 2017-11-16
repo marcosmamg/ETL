@@ -6,11 +6,11 @@ namespace ETL
 {
     public class FTPClient
     {
-        public string UserName { get; set; }
-        public string Password { get; set; }
-        public string URL { get; set; }
-        public string Port { get; set; }
-        public const string PORT_CONSTANT = "21";
+        private string UserName { get; set; }
+        private string Password { get; set; }
+        private string URL { get; set; }
+        private string Port { get; set; }
+        private const string PORT_CONSTANT = "21";
         //Initilizes FTPClient
         public FTPClient(string _userName, string _password, string _URL, string _port = PORT_CONSTANT)
         {
@@ -29,12 +29,13 @@ namespace ETL
                 URL = URL + ":" + Port + "/";
                 //Create Path Folder for File if does not exist
                 CreateFolder(Path);
-                // Get the object used to communicate with the server.                
+                // Get the object used to communicate with the server.     
+                
                 FtpWebRequest request = (FtpWebRequest)WebRequest.Create(FullPath +  FileName);
-                Console.WriteLine(URL + ':' + Port + Path + FileName);
-                request.Method = WebRequestMethods.Ftp.MakeDirectory;
                 request.Method = WebRequestMethods.Ftp.UploadFile;                
                 request.Credentials = new NetworkCredential(UserName, Password);
+
+
                 // Copy the contents of the file to the request stream.  
                 StreamReader sourceStream = new StreamReader(File);
                 byte[] fileContents = Encoding.UTF8.GetBytes(sourceStream.ReadToEnd());
