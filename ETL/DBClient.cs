@@ -19,23 +19,20 @@ namespace ETL
             catch (Exception ex)
             {
                 Utilities.Log("Opening Database Connection:" + ex.Message + ex.ToString(), "error");
-                Environment.Exit(1);
+                throw ex;
             }
         }
-        //Method that executes SQL statements, but not stored procedures
+        //Method that executes SQL statements
         public static DataTable GetQueryResultset(string query)
         {
             OdbcConnection sqlConnection = null;
-            DataSet dataset = new DataSet();
-            //Opening DB Connection
+            DataSet dataset = new DataSet();            
             DBClient.OpenConnection(ref sqlConnection);
             using (sqlConnection)
-            {
-                //filling the DataSet.
+            {                
                 OdbcDataAdapter adapter = new OdbcDataAdapter(query, sqlConnection);
                 adapter.Fill(dataset);
-            }
-            //Returning datatable
+            }            
             return dataset.Tables[0];
         }
     }

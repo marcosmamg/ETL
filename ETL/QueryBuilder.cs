@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Linq;
 
 namespace ETL
 {
@@ -10,44 +9,44 @@ namespace ETL
     {
         private const string QUERIES_FOLDER = "queries\\";
         private const string FILE_TYPE = "*.sql";
+
+        private static List<string> Queries { get; } = new List<string>();
+
         public static List<DataTable> GetData()
         {
             List<DataTable> data = new List<DataTable>();
-            List<string> queries = new List<string>();
             try
             {
-                queries = GetSQLQueries();
-                foreach (var query in queries)
+                GetSQLQueries();
+                foreach (var query in Queries)
                 {
                     data.Add(DBClient.GetQueryResultset(query));
-                }
-                return data;
+                }               
             }
             catch (Exception ex)
             {
                 Utilities.Log("Query Builder, status:" + ex.Message.ToString() + ex.ToString(), "error");
-                return data;
+                throw ex;
             }
+
+            return data;
         }
 
-        private static List<string> GetSQLQueries()
+        //Obtains SQL queries from files
+        private static void GetSQLQueries()
         {
-            List<string> queries = new List<string>();
             try
             {
-                //Extracting queries from sql files
                 string[] files = Directory.GetFiles(Utilities.BaseDirectory() + QUERIES_FOLDER, FILE_TYPE, SearchOption.TopDirectoryOnly);
 
                 foreach (var file in files)
-                {                    
-                    queries.Add(File.ReadAllText(file));                    
+                {
+                    Queries.Add(File.ReadAllText(file));                    
                 }              
-                return queries;                
             }
             catch (Exception ex)
             {
-                Utilities.Log("Query Builder, status:" + ex.Message.ToString() + ex.ToString(), "error");
-                return queries;
+                throw ex;
             }
         }       
     }
