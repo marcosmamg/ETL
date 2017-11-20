@@ -44,7 +44,7 @@ namespace ETL
             }
             catch (Exception ex)
             {
-                Utilities.Log("Generating CSV File:" + ex.Message + ex.ToString(), "error");
+                Utilities.Logger("Generating CSV File:" + ex.Message + ex.ToString(), "error");
                 throw ex;
             }
             return memoryStream;

@@ -9,27 +9,40 @@ namespace ETL
     {
         private const string QUERIES_FOLDER = "queries\\";
         private const string FILE_TYPE = "*.sql";
-
-        private static List<string> Queries { get; } = new List<string>();
+        private static List<string> Queries { get; } = new List<string>();        
 
         public static List<DataTable> GetData()
         {
-            List<DataTable> data = new List<DataTable>();
+            List<DataTable> data = new List<DataTable>();        
             try
             {
                 GetSQLQueries();
                 foreach (var query in Queries)
                 {
-                    data.Add(DBClient.GetQueryResultset(query));
+                    data.Add(ExecuteQuery(query));
                 }               
             }
             catch (Exception ex)
             {
-                Utilities.Log("Query Builder, status:" + ex.Message.ToString() + ex.ToString(), "error");
+                Utilities.Logger("Query Builder, status:" + ex.Message.ToString() + ex.ToString(), "error");
                 throw ex;
             }
 
             return data;
+        }
+
+        private static DataTable ExecuteQuery(string query)
+        {
+            DataTable queryData = new DataTable();
+            try
+            {
+                queryData = DBClient.GetQueryResultset(query);
+            }
+            catch (Exception ex)
+            {
+                Utilities.Logger("Query Builder, status:" + ex.Message.ToString() + ex.ToString(), "error");
+            }
+            return queryData;
         }
 
         //Obtains SQL queries from files

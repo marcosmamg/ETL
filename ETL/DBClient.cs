@@ -18,7 +18,7 @@ namespace ETL
             }
             catch (Exception ex)
             {
-                Utilities.Log("Opening Database Connection:" + ex.Message + ex.ToString(), "error");
+                Utilities.Logger("Opening Database Connection:" + ex.Message + ex.ToString(), "error");
                 throw ex;
             }
         }
@@ -26,13 +26,21 @@ namespace ETL
         public static DataTable GetQueryResultset(string query)
         {
             OdbcConnection sqlConnection = null;
-            DataSet dataset = new DataSet();            
-            DBClient.OpenConnection(ref sqlConnection);
-            using (sqlConnection)
+            DataSet dataset = new DataSet();
+            try
             {                
-                OdbcDataAdapter adapter = new OdbcDataAdapter(query, sqlConnection);
-                adapter.Fill(dataset);
-            }            
+                DBClient.OpenConnection(ref sqlConnection);
+                using (sqlConnection)
+                {
+                    OdbcDataAdapter adapter = new OdbcDataAdapter(query, sqlConnection);
+                    adapter.Fill(dataset);
+                }
+            }
+            catch (Exception ex)
+            {
+                Utilities.Logger("Executing SQL" + ex.Message + ex.ToString(), "error");
+                throw ex;
+            }
             return dataset.Tables[0];
         }
     }

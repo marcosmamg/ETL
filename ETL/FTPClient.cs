@@ -13,19 +13,11 @@ namespace ETL
         private string Password { get; set; }
         private UriBuilder Url { get; set; }           
         
-        public FTPClient(string _userName, string _password, string _url, string _port)
+        public FTPClient(string _userName, string _password, string _host, int _port)
         {
-            try
-            {
-                Username = _userName;
-                Password = _password;
-                Url = new UriBuilder("ftp", _url, int.Parse(_port));
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            
+            Username = _userName;
+            Password = _password;
+            Url = new UriBuilder("ftp", _host, _port);            
         }
         // Method receives file stream to upload it to a given path in the FTP
         public bool UploadFile(MemoryStream file, string path)
@@ -38,19 +30,21 @@ namespace ETL
                 FtpWebRequest request = (FtpWebRequest)WebRequest.Create(fullPath.ToString());
                 request.Method = WebRequestMethods.Ftp.UploadFile;                
                 request.Credentials = new NetworkCredential(Username, Password);
-                                
+                request.KeepAlive = false;
+
                 Stream requestStream = request.GetRequestStream();
                 requestStream.Write(file.ToArray(), 0, file.ToArray().Length);
                 requestStream.Close();                
                                 
                 FtpWebResponse response = (FtpWebResponse)request.GetResponse();                
-                Utilities.Log("Upload File Complete, status:" + response.StatusDescription);
+                Utilities.Logger("Upload File Complete, status:" + response.StatusDescription);
                 response.Close();
+                requestStream.Close();
                 result =  true;
             }            
             catch (Exception ex)
             {
-                Utilities.Log("FTP Client:" + ex.Message.ToString() + ex.ToString(), "error");
+                Utilities.Logger("FTP Client:" + ex.Message.ToString() + ex.ToString(), "error");
                 throw ex;
             }
             return result;
@@ -58,8 +52,7 @@ namespace ETL
         //Method to create folders if they do not exist in the FTP
         //Receives List<DataTable> to extract the distinct paths from the sql query
         public void GenerateFolderTree(List<DataTable> data)
-        {
-            string folderName = "";
+        {            
             try
             {
                 foreach (var query in data)
@@ -70,41 +63,64 @@ namespace ETL
                                 .ToList();
 
                     foreach (string path in filePaths)
-                    {
-                        string[] folderArray = path.Split('/');                        
-
+                    {                        
+                        string[] folderArray = path.Split('/');
+                        string folderName = "";
                         for (int i = 0; i < folderArray.Length; i++)
                         {
                             if (!string.IsNullOrEmpty(folderArray[i]))
                             {
-                                folderName = string.IsNullOrEmpty(folderName) ?
-                                            folderArray[i] : folderName + "/" + folderArray[i] + "/";
+                                //folderName = string.IsNullOrEmpty(folderName) ?
+                                //            folderArray[i] : folderName + "/" + folderArray[i] + "/";
+                                if (string.IsNullOrEmpty(folderName))
+                                {
+                                    folderName = folderArray[i];
+                                }
+                                else
+                                {
+                                    folderName = folderName + "/" + folderArray[i] + "/";
+                                }
+                                if (!CheckIfFolderExists(Url + folderName))
+                                {
+                                    //Create Folder
+                                    FtpWebRequest requestFolder = (FtpWebRequest)WebRequest.Create(Url + folderName);                                    
+                                    requestFolder.Method = WebRequestMethods.Ftp.MakeDirectory;
+                                    requestFolder.Credentials = new NetworkCredential(Username, Password);
+                                    requestFolder.KeepAlive = false;
 
-                                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(Url + folderName);
-                                request.Method = WebRequestMethods.Ftp.ListDirectory;
-                                request.Credentials = new NetworkCredential(Username, Password);
-                                //Verifying if the folder was correctly listed
-                                using (FtpWebResponse response = (FtpWebResponse)request.GetResponse())
-                                {                                        
-                                }                                    
-                                
+                                    var resp = (FtpWebResponse)requestFolder.GetResponse();
+                                    resp.Close();                                                                        
+                                }
                             }
                         }
                     }
-                }                                
-            }
-            catch (WebException ex)
-            {
-                //Create Folder
-                WebRequest requestRootFolder = WebRequest.Create(Url + folderName);
-                requestRootFolder.Method = WebRequestMethods.Ftp.MakeDirectory;
-                requestRootFolder.Credentials = new NetworkCredential(Username, Password);
-
-                using (var resp = (FtpWebResponse)requestRootFolder.GetResponse())
-                {                    
-                    Utilities.Log("FTP Client:" + resp.StatusCode);
                 }
             }
-        }        
+            catch (Exception ex)
+            {
+                Utilities.Logger("FTP Client:" + ex.Message.ToString() + ex.ToString(), "error");
+                throw ex;
+            }
+        }
+
+    private bool CheckIfFolderExists(string path)
+        {
+            try
+            {                
+                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(path);
+                request.Method = WebRequestMethods.Ftp.ListDirectory;
+                request.Credentials = new NetworkCredential(Username, Password);
+                request.KeepAlive = false;
+
+                var resp = (FtpWebResponse)request.GetResponse();
+                resp.Close();                
+                return true;
+                
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }
