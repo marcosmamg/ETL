@@ -1,12 +1,12 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.IO;
 namespace ETL
 {
     class Utilities
-    {   //TODO: ONE FILE PER DAY IN A FOLDER
+    {
         //Method to log any error or completed action
-        public static void Logger(string message, string action = "")
+        public static void Log(string message, string action = "")
         {
             CultureInfo culture = CultureInfo.CurrentCulture;
             if (action == "error")

@@ -12,7 +12,7 @@ namespace ETL
         private string Username { get; set; }
         private string Password { get; set; }
         private UriBuilder Url { get; set; }           
-        
+        //TODO: USE ONLY ONE CONNECTION
         public FTPClient(string _userName, string _password, string _host, int _port)
         {
             Username = _userName;
@@ -87,7 +87,7 @@ namespace ETL
                                     requestFolder.Method = WebRequestMethods.Ftp.MakeDirectory;
                                     requestFolder.Credentials = new NetworkCredential(Username, Password);
                                     requestFolder.KeepAlive = false;
-
+                                    //TODO: USING INSTEAD
                                     var resp = (FtpWebResponse)requestFolder.GetResponse();
                                     resp.Close();                                                                        
                                 }

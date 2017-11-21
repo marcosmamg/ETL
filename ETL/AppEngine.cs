@@ -5,19 +5,18 @@ using System.Linq;
 namespace ETL
 {
     public class ApplicationEngine
-    {
-        //private const int DEFAULT_FTP_PORT = 21;        
+    {        
         private static string username = null;
         private static string password = null;
         private static string host = null;
-        private static int port = 21;
+        private static int ftpPort = 21;
         private static bool hasCSVHeaders = false;
 
         static void Main(string[] args)
         {
             try
             {
-                if (!Utilities.HasValidArguments(args, out username, out password, out host, out port, out hasCSVHeaders))
+                if (!HasValidArguments(args))
                 {
                     throw new Exception("The required parameters were not provided: " +
                                     "(username, password, host)");
@@ -27,7 +26,7 @@ namespace ETL
                 List<DataTable> data = QueryBuilder.GetData();
 
                 Console.WriteLine("Generating folder tree in FTP");
-                FTPClient ftp = new FTPClient(username, password, host, port);
+                FTPClient ftp = new FTPClient(username, password, host, ftpPort);
                 ftp.GenerateFolderTree(data);
 
                 foreach (DataTable table in data)
@@ -40,9 +39,12 @@ namespace ETL
                     foreach (string path in filePaths)
                     {
                         Console.WriteLine("Generating CSV");
-                        DataTable csvData = table.AsEnumerable()
-                                            .Where(row => row.Field<string>("Path") == path)
-                                            .CopyToDataTable();
+                        //TODO:DATAROWS
+                        DataTable csvData = table.Select("path='" + path + "'").CopyToDataTable();
+                            
+                                            //AsEnumerable()
+                                            //.Where(row => row.Field<string>("Path") == path)
+                                            //.CopyToDataTable();
 
                         System.IO.MemoryStream file = CsvGenerator.GenerateCSV(csvData, hasCSVHeaders);
 
@@ -59,6 +61,56 @@ namespace ETL
                 Utilities.Logger(ex.Message.ToString() + ex.ToString(), "error");
                 Environment.Exit(1);
             }
+        }
+
+        public static bool HasValidArguments(string[] args)
+        {
+            try
+            {
+                foreach (string argument in args)
+                {
+                    string[] splitted = argument.Split('=');
+
+                    if (splitted.Length == 2)
+                    {
+                        switch (splitted[0])
+                        {
+                            case "user":
+                                username = splitted[1];
+                                break;
+                            case "password":
+                                password = splitted[1];
+                                break;
+                            case "host":
+                                host = splitted[1];
+                                break;
+                            case "port":
+                                ftpPort = int.Parse(splitted[1]);
+                                break;
+                            case "includeheader":
+                                hasCSVHeaders = bool.Parse(splitted[1]);
+                                break;
+                        };
+                    }
+                    else
+                    {
+                        throw new Exception("Error in parameters, please verify");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Utilities.Logger("Error with one or more parameters: \n" +
+                                  "Number of parameters provided =" + args.Length +
+                                  "\n Help: Port = (int number), includeheader = (true or false)",
+                                  "error");
+                foreach (string argument in args)
+                {
+                    Utilities.Logger(argument, "error");
+                }
+                throw ex;
+            }
+            return (username != null && password != null && host != null);
         }
     }
 }
