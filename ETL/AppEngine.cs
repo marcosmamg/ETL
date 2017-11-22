@@ -28,32 +28,33 @@ namespace ETL
                 Console.WriteLine("Generating folder tree in FTP");
                 FTPClient ftp = new FTPClient(username, password, host, ftpPort);
                 ftp.GenerateFolderTree(data);
-
+                
                 foreach (DataTable table in data)
                 {
                     List<string> filePaths = table.AsEnumerable()
                                             .Select(row => row.Field<string>("Path"))
                                             .Distinct()
                                             .ToList();
-
+                    
                     foreach (string path in filePaths)
                     {
                         Console.WriteLine("Generating CSV");
                         //TODO:DATAROWS
-                        DataTable csvData = table.Select("path='" + path + "'").CopyToDataTable();                            
-                        System.IO.MemoryStream file = CsvGenerator.GenerateCSV(csvData, hasCSVHeaders);
+                        DataRow[] csvData = table.Select("path='" + path + "'");                            
+                        System.IO.MemoryStream file = CsvGenerator.GenerateCSV(csvData, table.Columns, hasCSVHeaders);
 
                         Console.WriteLine("Uploading to FTP");
                         string ftpPath = path + "/" + table.Rows[0]["FileName"].ToString();
                         ftp.UploadFile(file, ftpPath);
                     }
-                }
+                }                                
                 Console.WriteLine("Process completed succesfully");
-                Environment.Exit(0);
+                //Environment.Exit(0);
+                Console.ReadLine();
             }
             catch (Exception ex)
             {
-                Utilities.Logger(ex.Message.ToString() + ex.ToString(), "error");
+                Utilities.Logger(ex.ToString(), "error");
                 Environment.Exit(1);
             }
         }

@@ -18,7 +18,7 @@ namespace ETL
             }
             catch (Exception ex)
             {
-                Utilities.Logger("Opening Database Connection:" + ex.Message + ex.ToString(), "error");
+                Utilities.Logger("Opening Database Connection:" + ex.ToString(), "error");
                 throw ex;
             }
         }
@@ -38,7 +38,7 @@ namespace ETL
             }
             catch (Exception ex)
             {
-                Utilities.Logger("Executing SQL" + ex.Message + ex.ToString(), "error");
+                Utilities.Logger("Executing SQL" + ex.ToString(), "error");
                 throw ex;
             }
             return dataset.Tables[0];

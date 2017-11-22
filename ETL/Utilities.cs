@@ -12,7 +12,8 @@ namespace ETL
             if (action == "error")
             {
                 // Write the string to a file named "ETLErrorLog.txt".
-                using (StreamWriter outputFile = new StreamWriter(Utilities.BaseDirectory() + @"ETLErrorLog.txt", true))
+                Console.WriteLine(Utilities.BaseDirectory() + "Logs/" + @"ETLErrorLog" + DateTime.Now.ToString("yyyyMMdd") + ".txt");
+                using (StreamWriter outputFile = new StreamWriter(Utilities.BaseDirectory() + "Logs/" + @"ETLErrorLog" + DateTime.Now.ToString("yyyyMMdd") + ".txt", true))
                 {                    
                     outputFile.WriteLine(System.DateTime.Now.ToString(culture) + ':' + message);
                 }
@@ -20,7 +21,7 @@ namespace ETL
             else
             {
                 // Write the string to a file named "ETLLog.txt".
-                using (StreamWriter outputFile = new StreamWriter(Utilities.BaseDirectory() + @"ETLLog.txt", true))
+                using (StreamWriter outputFile = new StreamWriter(Utilities.BaseDirectory() + "Logs/" + "ETLLog.txt", true))
                 {
                     outputFile.WriteLine(System.DateTime.Now.ToString(culture) + ':' + message);
                 }

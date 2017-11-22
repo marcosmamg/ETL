@@ -11,9 +11,8 @@ namespace ETL
     {
         private string Username { get; set; }
         private string Password { get; set; }
-        private UriBuilder Url { get; set; }
-        private List<string> Folders = new List<string>();
-        FtpWebRequest request;
+        private UriBuilder Url { get; set; }        
+        public FtpWebRequest Request { get; set; }
         //TODO: USE ONLY ONE CONNECTION
         public FTPClient(string _userName, string _password, string _host, int _port)
         {
@@ -21,33 +20,36 @@ namespace ETL
             Password = _password;
             Url = new UriBuilder("ftp", _host, _port);            
         }
+        private void InitializeRequest(string method, string fullPath)
+        {
+            Request = (FtpWebRequest)WebRequest.Create(fullPath);
+            Request.Method = method;
+            Request.Credentials = new NetworkCredential(Username, Password);
+            Request.KeepAlive = true;            
+        }
         // Method receives file stream to upload it to a given path in the FTP
         public bool UploadFile(MemoryStream file, string path)
         {
             bool result = false;
             try
             {               
-                UriBuilder fullPath = new UriBuilder(Url.Scheme, Url.Host, Url.Port, path);                                
-                
-                request = (FtpWebRequest)WebRequest.Create(fullPath.ToString());
-                request.Method = WebRequestMethods.Ftp.UploadFile;                
-                request.Credentials = new NetworkCredential(Username, Password);
-                request.KeepAlive = false;
+                UriBuilder fullPath = new UriBuilder(Url.Scheme, Url.Host, Url.Port, path);
 
-                Stream requestStream = request.GetRequestStream();
+                InitializeRequest(WebRequestMethods.Ftp.UploadFile, fullPath.ToString());
+
+                Stream requestStream = Request.GetRequestStream();
                 requestStream.Write(file.ToArray(), 0, file.ToArray().Length);
-                requestStream.Close();                
-                                
-                FtpWebResponse response = (FtpWebResponse)request.GetResponse();                
-                Utilities.Logger("Upload File Complete, status:" + response.StatusDescription);
-                response.Close();
                 requestStream.Close();
-                result =  true;
+
+                using (var response = (FtpWebResponse)Request.GetResponse())
+                {
+                    Utilities.Logger("Upload File Complete, status:" + path + "\n" +response.StatusDescription);
+                    result = true;                    
+                }                
             }            
             catch (Exception ex)
             {
-                Utilities.Logger("FTP Client:" + ex.Message.ToString() + ex.ToString(), "error");
-                throw ex;
+                Utilities.Logger("FTP Client:" + ex.ToString(), "error");                
             }
             return result;
         }
@@ -55,8 +57,11 @@ namespace ETL
         //Receives List<DataTable> to extract the distinct paths from the sql query
         public void GenerateFolderTree(List<DataTable> data)
         {
+            List<string> Folders = new List<string>();
             try
             {
+                //TODO: Remove watch
+                var watch = System.Diagnostics.Stopwatch.StartNew();
                 foreach (var query in data)
                 {
                     List<string> filePaths = query.AsEnumerable()
@@ -72,8 +77,6 @@ namespace ETL
                         {
                             if (!string.IsNullOrEmpty(folderArray[i]))
                             {
-                                //folderName = string.IsNullOrEmpty(folderName) ?
-                                //            folderArray[i] : folderName + "/" + folderArray[i] + "/";
                                 if (string.IsNullOrEmpty(folderName))
                                 {
                                     folderName = folderArray[i];
@@ -83,35 +86,51 @@ namespace ETL
                                     folderName = folderName + "/" + folderArray[i] + "/";
                                 }
                                 if (Folders.IndexOf(folderName) == -1)
-                                {                                    
-                                    Folders.Add(folderName);
-                                    request = (FtpWebRequest)WebRequest.Create(Url + folderName);
-                                    request.Method = WebRequestMethods.Ftp.MakeDirectory;
-                                    request.Credentials = new NetworkCredential(Username, Password);
-                                    request.KeepAlive = false;
-                                    //TODO: USING INSTEAD
-                                    var resp = (FtpWebResponse)request.GetResponse();
-                                    resp.Close();
+                                {
+                                    if (CreateFolder(folderName))
+                                        Folders.Add(folderName);
                                 }
                             }
                         }
                     }
                 }
-            }            
+                watch.Stop();
+                Console.WriteLine(watch.ElapsedMilliseconds);
+            }
             catch (WebException ex)
             {
                 if (ex.Response != null)
                 {
                     FtpWebResponse response = (FtpWebResponse)ex.Response;
+                    //Validate if error is 550 (Folder exist)
                     if (!(response.StatusCode == FtpStatusCode.ActionNotTakenFileUnavailable))
                     {
-                        //Folder already exist
-                        Utilities.Logger("FTP Client:" + ex.Message.ToString() + ex.ToString(), "error");
+                        //Error is different to Folder exist (550)
+                        Utilities.Logger("FTP Client:" + ex.ToString(), "error");
                         throw ex;
                     }                    
                 }                
                 
             }
+        }
+        private bool CreateFolder(string folderName)
+        {
+            bool result;
+            try
+            {
+                InitializeRequest(WebRequestMethods.Ftp.MakeDirectory, Url + folderName);
+
+                using (var resp = (FtpWebResponse)Request.GetResponse())
+                {
+                    result = true;
+                }
+
+            }
+            catch
+            {
+                result = false;
+            }
+            return result;
         }
     }
 }

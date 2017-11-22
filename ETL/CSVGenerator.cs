@@ -8,7 +8,7 @@ namespace ETL
     public class CsvGenerator
     {
         //Method that generates CSV File from SQLDatareader
-        public static MemoryStream GenerateCSV(DataTable data, bool hasCSVHeader)
+        public static MemoryStream GenerateCSV(DataRow[] dataRows, DataColumnCollection columns, bool hasCSVHeader)
         {
             var memoryStream = new MemoryStream();
             try
@@ -23,16 +23,16 @@ namespace ETL
 
                 if (csv.Configuration.HasHeaderRecord)
                 {
-                    foreach (DataColumn column in data.Columns)
+                    foreach (DataColumn column in columns)
                     {
                         csv.WriteField(column.ColumnName);
                     }
                     csv.NextRecord();
                 }
                 
-                foreach (DataRow row in data.Rows)
+                foreach (DataRow row in dataRows)
                 {
-                    for (var i = 0; i < data.Columns.Count; i++)
+                    for (var i = 0; i < columns.Count; i++)
                     {
                         csv.WriteField(row[i]);
                     }
@@ -44,7 +44,7 @@ namespace ETL
             }
             catch (Exception ex)
             {
-                Utilities.Logger("Generating CSV File:" + ex.Message + ex.ToString(), "error");
+                Utilities.Logger("Generating CSV File:" + ex.ToString(), "error");
                 throw ex;
             }
             return memoryStream;

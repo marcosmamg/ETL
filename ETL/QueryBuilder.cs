@@ -24,7 +24,7 @@ namespace ETL
             }
             catch (Exception ex)
             {
-                Utilities.Logger("Query Builder, status:" + ex.Message.ToString() + ex.ToString(), "error");
+                Utilities.Logger("Query Builder, status:" + ex.ToString(), "error");
                 throw ex;
             }
 
@@ -40,7 +40,7 @@ namespace ETL
             }
             catch (Exception ex)
             {
-                Utilities.Logger("Query Builder, status:" + ex.Message.ToString() + ex.ToString(), "error");
+                Utilities.Logger("Query Builder, status:" + ex.ToString(), "error");
             }
             return queryData;
         }
