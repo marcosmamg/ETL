@@ -40,12 +40,7 @@ namespace ETL
                     {
                         Console.WriteLine("Generating CSV");
                         //TODO:DATAROWS
-                        DataTable csvData = table.Select("path='" + path + "'").CopyToDataTable();
-                            
-                                            //AsEnumerable()
-                                            //.Where(row => row.Field<string>("Path") == path)
-                                            //.CopyToDataTable();
-
+                        DataTable csvData = table.Select("path='" + path + "'").CopyToDataTable();                            
                         System.IO.MemoryStream file = CsvGenerator.GenerateCSV(csvData, hasCSVHeaders);
 
                         Console.WriteLine("Uploading to FTP");
