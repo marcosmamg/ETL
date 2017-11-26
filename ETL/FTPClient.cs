@@ -20,22 +20,22 @@ namespace ETL
             Password = _password;
             Url = new UriBuilder("ftp", _host, _port);            
         }
-        private void InitializeRequest(string method, string fullPath)
+        private void InitializeRequest(string method, string fullPath, bool keepAlive)
         {
             Request = (FtpWebRequest)WebRequest.Create(fullPath);
             Request.Method = method;
             Request.Credentials = new NetworkCredential(Username, Password);
-            Request.KeepAlive = true;            
+            Request.KeepAlive = keepAlive;            
         }
         // Method receives file stream to upload it to a given path in the FTP
-        public bool UploadFile(MemoryStream file, string path)
+        public bool UploadFile(MemoryStream file, string path, bool keepAlive)
         {
             bool result = false;
             try
             {               
                 UriBuilder fullPath = new UriBuilder(Url.Scheme, Url.Host, Url.Port, path);
 
-                InitializeRequest(WebRequestMethods.Ftp.UploadFile, fullPath.ToString());
+                InitializeRequest(WebRequestMethods.Ftp.UploadFile, fullPath.ToString(), keepAlive);
 
                 Stream requestStream = Request.GetRequestStream();
                 requestStream.Write(file.ToArray(), 0, file.ToArray().Length);
@@ -56,12 +56,10 @@ namespace ETL
         //Method to create folders if they do not exist in the FTP
         //Receives List<DataTable> to extract the distinct paths from the sql query
         public void GenerateFolderTree(List<DataTable> data)
-        {
-            List<string> Folders = new List<string>();
+        {            
             try
             {
-                //TODO: Remove watch
-                var watch = System.Diagnostics.Stopwatch.StartNew();
+                //TODO: Remove watch                
                 foreach (var query in data)
                 {
                     List<string> filePaths = query.AsEnumerable()
@@ -84,18 +82,18 @@ namespace ETL
                                 else
                                 {
                                     folderName = folderName + "/" + folderArray[i] + "/";
-                                }
-                                if (Folders.IndexOf(folderName) == -1)
+                                }                                                                
+                                if (!IsNotInLocalTree(folderName))
                                 {
-                                    if (CreateFolder(folderName))
-                                        Folders.Add(folderName);
+                                    if (CreateFolderInFTP(folderName))
+                                    {                                        
+                                        SaveFoldersTreeLocally(folderName);
+                                    }                                    
                                 }
                             }
                         }
                     }
-                }
-                watch.Stop();
-                Console.WriteLine(watch.ElapsedMilliseconds);
+                }                
             }
             catch (WebException ex)
             {
@@ -113,12 +111,28 @@ namespace ETL
                 
             }
         }
-        private bool CreateFolder(string folderName)
+
+        private bool IsNotInLocalTree(string folderName)
+        {
+            var treeFile = File.ReadAllLines(Utilities.BaseDirectory() + "/Logs/foldersTree.txt");
+            List<string> treeList = new List<string>(treeFile);            
+            return treeList.IndexOf(folderName) >= 0;
+        }
+
+        private void SaveFoldersTreeLocally(string folderName)
+        {
+            using (StreamWriter outputFile = new StreamWriter(Utilities.BaseDirectory() + "Logs/" + @"foldersTree.txt", true))
+            {
+                outputFile.WriteLine(folderName);
+            }
+        }
+
+        private bool CreateFolderInFTP(string folderName)
         {
             bool result;
             try
             {
-                InitializeRequest(WebRequestMethods.Ftp.MakeDirectory, Url + folderName);
+                InitializeRequest(WebRequestMethods.Ftp.MakeDirectory, Url + folderName, true);
 
                 using (var resp = (FtpWebResponse)Request.GetResponse())
                 {

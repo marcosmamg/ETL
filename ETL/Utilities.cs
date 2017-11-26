@@ -11,8 +11,7 @@ namespace ETL
             CultureInfo culture = CultureInfo.CurrentCulture;
             if (action == "error")
             {
-                // Write the string to a file named "ETLErrorLog.txt".
-                Console.WriteLine(Utilities.BaseDirectory() + "Logs/" + @"ETLErrorLog" + DateTime.Now.ToString("yyyyMMdd") + ".txt");
+                // Write the string to a file named "ETLErrorLog.txt".                
                 using (StreamWriter outputFile = new StreamWriter(Utilities.BaseDirectory() + "Logs/" + @"ETLErrorLog" + DateTime.Now.ToString("yyyyMMdd") + ".txt", true))
                 {                    
                     outputFile.WriteLine(System.DateTime.Now.ToString(culture) + ':' + message);
@@ -21,12 +20,11 @@ namespace ETL
             else
             {
                 // Write the string to a file named "ETLLog.txt".
-                using (StreamWriter outputFile = new StreamWriter(Utilities.BaseDirectory() + "Logs/" + "ETLLog.txt", true))
+                using (StreamWriter outputFile = new StreamWriter(Utilities.BaseDirectory() + "Logs/" + @"ETLLog" + DateTime.Now.ToString("yyyyMMdd") + ".txt", true))
                 {
                     outputFile.WriteLine(System.DateTime.Now.ToString(culture) + ':' + message);
                 }
-            }
-            Console.WriteLine(message);            
+            }            
         }
         //Method to return Base directory of the execution file
         public static string BaseDirectory()

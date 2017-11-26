@@ -10,12 +10,14 @@ namespace ETL
         private static string password = null;
         private static string host = null;
         private static int ftpPort = 21;
+        private static string rootFolder = null;
         private static bool hasCSVHeaders = false;
 
         static void Main(string[] args)
         {
             try
             {
+                int tablesCount = 0;
                 if (!HasValidArguments(args))
                 {
                     throw new Exception("The required parameters were not provided: " +
@@ -27,30 +29,40 @@ namespace ETL
 
                 Console.WriteLine("Generating folder tree in FTP");
                 FTPClient ftp = new FTPClient(username, password, host, ftpPort);
-                ftp.GenerateFolderTree(data);
-                
+                ftp.GenerateFolderTree(data);                
                 foreach (DataTable table in data)
                 {
+                    int filePathsCount = 0;                    
                     List<string> filePaths = table.AsEnumerable()
                                             .Select(row => row.Field<string>("Path"))
                                             .Distinct()
                                             .ToList();
                     
                     foreach (string path in filePaths)
-                    {
+                    {   
                         Console.WriteLine("Generating CSV");
                         //TODO:DATAROWS
-                        DataRow[] csvData = table.Select("path='" + path + "'");                            
-                        System.IO.MemoryStream file = CsvGenerator.GenerateCSV(csvData, table.Columns, hasCSVHeaders);
-
-                        Console.WriteLine("Uploading to FTP");
                         string ftpPath = path + "/" + table.Rows[0]["FileName"].ToString();
-                        ftp.UploadFile(file, ftpPath);
+                        DataRow[] csvData = table.Select("path='" + path + "'");
+                        string[] excludedColumns = table.Rows[0]["Excludedcolumns"].ToString().Split(',');
+                        System.IO.MemoryStream file = CsvGenerator.GenerateCSV(csvData, table.Columns, hasCSVHeaders, excludedColumns);
+
+                        Console.WriteLine("Uploading to FTP");                        
+                        //If Last file of datatables: Request KeepAlive = False to close connection
+                        if (tablesCount == data.Count() && filePathsCount == filePaths.Count())
+                        {
+                            ftp.UploadFile(file, ftpPath, false);
+                        }
+                        else
+                        {
+                            ftp.UploadFile(file, ftpPath, true);
+                        }
+                        filePathsCount++;
                     }
+                    tablesCount++;
                 }                                
                 Console.WriteLine("Process completed succesfully");
-                //Environment.Exit(0);
-                Console.ReadLine();
+                Environment.Exit(0);                
             }
             catch (Exception ex)
             {

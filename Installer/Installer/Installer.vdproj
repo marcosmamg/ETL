@@ -33,6 +33,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_6474E25590B044709798EE2975834C7A"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_8B0CBAB2D5BC472C97DD0751CBFE9A37"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -51,7 +57,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_B8113C5567BCAE82B0AB76A911FA7CD9"
+        "MsmKey" = "8:_B8A772B5E4DD80DE7BB0564CA190030E"
         "OwnerKey" = "8:_63C8A220EB5340DB934A575FDCA6BF90"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -76,7 +82,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_B8113C5567BCAE82B0AB76A911FA7CD9"
+        "OwnerKey" = "8:_B8A772B5E4DD80DE7BB0564CA190030E"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -151,6 +157,20 @@
     {
         "CustomAction"
         {
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_1C6980C333D748EA8EA38ACA2F8C5B94"
+            {
+            "Name" = "8:Primary output from ETL (Active)"
+            "Condition" = "8:"
+            "Object" = "8:"
+            "FileType" = "3:2"
+            "InstallAction" = "3:2"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:1"
+            "Identifier" = "8:_83626960_85CC_4D77_BD31_F640243E9239"
+            "InstallerClass" = "11:TRUE"
+            "CustomActionData" = "8:/dnsParameter=”[dnsParameter]”"
+            }
         }
         "DefaultFeature"
         {
@@ -245,6 +265,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6474E25590B044709798EE2975834C7A"
+            {
+            "SourcePath" = "8:..\\..\\ETL\\logo.ico"
+            "TargetName" = "8:logo.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_0041C68E834044689246FA4F578DE1FE"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8B0CBAB2D5BC472C97DD0751CBFE9A37"
             {
             "SourcePath" = "8:..\\..\\ETL\\bin\\Debug\\queries\\CUSTOMER.sql"
@@ -305,18 +345,13 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_B8113C5567BCAE82B0AB76A911FA7CD9"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_B8A772B5E4DD80DE7BB0564CA190030E"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:CsvHelper, Version=4.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_B8113C5567BCAE82B0AB76A911FA7CD9"
-                    {
-                    "Name" = "8:CsvHelper.DLL"
-                    "Attributes" = "3:514"
-                    }
                 }
             "SourcePath" = "8:CsvHelper.DLL"
             "TargetName" = "8:"
@@ -455,7 +490,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:ETL"
         "ProductCode" = "8:{9EEC4612-55EB-4545-8ECB-779F2832F042}"
-        "PackageCode" = "8:{B58B9B8F-9E9B-4787-BE2A-8D369DAD263D}"
+        "PackageCode" = "8:{ED7C4374-2145-4D95-8214-67FCA7F44236}"
         "UpgradeCode" = "8:{66C51C1A-8EE6-4417-AC30-0430339ECF15}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -472,7 +507,7 @@
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:"
         "ARPURLINFOABOUT" = "8:ooqia.com"
-        "ARPPRODUCTICON" = "8:"
+        "ARPPRODUCTICON" = "8:_6474E25590B044709798EE2975834C7A"
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"
@@ -719,7 +754,7 @@
                             "ContextData" = "8:Public"
                             "Attributes" = "3:2"
                             "Setting" = "3:2"
-                            "Value" = "8:DNS"
+                            "Value" = "8:DSN"
                             "DefaultValue" = "8:EDITA1"
                             "UsePlugInResources" = "11:TRUE"
                             }

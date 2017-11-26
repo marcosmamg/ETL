@@ -9,7 +9,7 @@ namespace ETL
     {
         private const string QUERIES_FOLDER = "queries\\";
         private const string FILE_TYPE = "*.sql";
-        private static List<string> Queries { get; } = new List<string>();        
+        private static List<string> Queries { get; } = new List<string>();
 
         public static List<DataTable> GetData()
         {
@@ -24,8 +24,7 @@ namespace ETL
             }
             catch (Exception ex)
             {
-                Utilities.Logger("Query Builder, status:" + ex.ToString(), "error");
-                throw ex;
+                Utilities.Logger("Query Builder, status:" + ex.ToString(), "error");                
             }
 
             return data;
