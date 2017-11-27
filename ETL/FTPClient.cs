@@ -54,44 +54,36 @@ namespace ETL
         }
         //Method to create folders if they do not exist in the FTP
         //Receives List<DataTable> to extract the distinct paths from the sql query
-        public void GenerateFolderTree(List<DataTable> data)
+        public void GenerateFolderTree(List<string> paths)
         {            
             try
             {                
-                foreach (var query in data)
+                foreach (string path in paths)
                 {
-                    List<string> filePaths = query.AsEnumerable()
-                                .Select(row => row.Field<string>("Path"))
-                                .Distinct()
-                                .ToList();
-
-                    foreach (string path in filePaths)
+                    string[] folderArray = path.Split('/');
+                    string folderName = "";
+                    for (int i = 0; i < folderArray.Length; i++)
                     {
-                        string[] folderArray = path.Split('/');
-                        string folderName = "";
-                        for (int i = 0; i < folderArray.Length; i++)
+                        if (!string.IsNullOrEmpty(folderArray[i]))
                         {
-                            if (!string.IsNullOrEmpty(folderArray[i]))
+                            if (string.IsNullOrEmpty(folderName))
                             {
-                                if (string.IsNullOrEmpty(folderName))
-                                {
-                                    folderName = folderArray[i];
-                                }
-                                else
-                                {
-                                    folderName = folderName + "/" + folderArray[i] + "/";
-                                }                                                                
-                                if (!IsInLocalTree(folderName))
-                                {
-                                    if (CreateFolderInFTP(folderName))
-                                    {                                        
-                                        SaveFoldersTreeLocally(folderName);
-                                    }                                    
-                                }
+                                folderName = folderArray[i];
+                            }
+                            else
+                            {
+                                folderName = folderName + "/" + folderArray[i] + "/";
+                            }                                                                
+                            if (!IsInLocalTree(folderName))
+                            {
+                                if (CreateFolderInFTP(folderName))
+                                {                                        
+                                    SaveFoldersTreeLocally(folderName);
+                                }                                    
                             }
                         }
                     }
-                }                
+                }                                
             }
             catch (WebException ex)
             {

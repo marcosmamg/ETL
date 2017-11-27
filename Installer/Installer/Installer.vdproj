@@ -75,13 +75,13 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_B8A772B5E4DD80DE7BB0564CA190030E"
+        "MsmKey" = "8:_A25E1577AE10D2D32C9FD7166EE1D8A7"
         "OwnerKey" = "8:_8D1D44E8D28342D883BE7433BCFE0670"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_B8A772B5E4DD80DE7BB0564CA190030E"
+        "MsmKey" = "8:_A25E1577AE10D2D32C9FD7166EE1D8A7"
         "OwnerKey" = "8:_14F3F077EBC24A8EAD3B047D71E60A80"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -100,7 +100,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_B8A772B5E4DD80DE7BB0564CA190030E"
+        "OwnerKey" = "8:_8D1D44E8D28342D883BE7433BCFE0670"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -112,7 +112,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_8D1D44E8D28342D883BE7433BCFE0670"
+        "OwnerKey" = "8:_A25E1577AE10D2D32C9FD7166EE1D8A7"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -193,49 +193,7 @@
     {
         "CustomAction"
         {
-            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_36B2D6FE400E414C9FF97B989C2EA96B"
-            {
-            "Name" = "8:Primary output from ETL (Active)"
-            "Condition" = "8:"
-            "Object" = "8:_8D1D44E8D28342D883BE7433BCFE0670"
-            "FileType" = "3:2"
-            "InstallAction" = "3:3"
-            "Arguments" = "8:"
-            "EntryPoint" = "8:"
-            "Sequence" = "3:1"
-            "Identifier" = "8:_2C821165_EF4D_4C04_95FF_F2200FB1C9EF"
-            "InstallerClass" = "11:TRUE"
-            "CustomActionData" = "8:/DSN=[DSN]"
-            }
-            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_D83DAC564A1440659F807D479C0747B1"
-            {
-            "Name" = "8:Primary output from ETL (Active)"
-            "Condition" = "8:"
-            "Object" = "8:_8D1D44E8D28342D883BE7433BCFE0670"
-            "FileType" = "3:2"
-            "InstallAction" = "3:1"
-            "Arguments" = "8:"
-            "EntryPoint" = "8:"
-            "Sequence" = "3:1"
-            "Identifier" = "8:_F8DB4DCA_DA9B_4EDF_9B59_92550C175739"
-            "InstallerClass" = "11:TRUE"
-            "CustomActionData" = "8:/DSN=[DSN]"
-            }
-            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_EE75880D37EB4EFA92B70EF037B40EDB"
-            {
-            "Name" = "8:Primary output from ETL (Active)"
-            "Condition" = "8:"
-            "Object" = "8:_8D1D44E8D28342D883BE7433BCFE0670"
-            "FileType" = "3:2"
-            "InstallAction" = "3:4"
-            "Arguments" = "8:"
-            "EntryPoint" = "8:"
-            "Sequence" = "3:1"
-            "Identifier" = "8:_03A2658E_122E_41AC_91B7_0DEB57D0BC49"
-            "InstallerClass" = "11:TRUE"
-            "CustomActionData" = "8:/DSN=[DSN]"
-            }
-            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_F0FD06F99FAA42FFB6FEDB10A1596BDE"
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_0B6DDFF1FE094C10B553842BF6947DFE"
             {
             "Name" = "8:Primary output from ETL (Active)"
             "Condition" = "8:"
@@ -245,7 +203,49 @@
             "Arguments" = "8:"
             "EntryPoint" = "8:"
             "Sequence" = "3:1"
-            "Identifier" = "8:_D3342553_DD2C_49C7_B3BE_0E454F1A3025"
+            "Identifier" = "8:_0D578217_F931_457A_857D_68D87B9E33F4"
+            "InstallerClass" = "11:TRUE"
+            "CustomActionData" = "8:/DSN=[DSN]"
+            }
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_1FF2DC9271074A76A29B56E4DFC363B1"
+            {
+            "Name" = "8:Primary output from ETL (Active)"
+            "Condition" = "8:"
+            "Object" = "8:_8D1D44E8D28342D883BE7433BCFE0670"
+            "FileType" = "3:2"
+            "InstallAction" = "3:3"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:1"
+            "Identifier" = "8:_DF23949B_5A4A_4EA4_9177_548DA3F47DC9"
+            "InstallerClass" = "11:TRUE"
+            "CustomActionData" = "8:/DSN=[DSN]"
+            }
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_B492B6FBA4904C52BAFB96E647B67714"
+            {
+            "Name" = "8:Primary output from ETL (Active)"
+            "Condition" = "8:"
+            "Object" = "8:_8D1D44E8D28342D883BE7433BCFE0670"
+            "FileType" = "3:2"
+            "InstallAction" = "3:4"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:1"
+            "Identifier" = "8:_617FE1C8_5859_48CB_A0EA_80C57A7C2DE8"
+            "InstallerClass" = "11:TRUE"
+            "CustomActionData" = "8:/DSN=[DSN]"
+            }
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_DA6707B1F9E8457683C0512BB95D2412"
+            {
+            "Name" = "8:Primary output from ETL (Active)"
+            "Condition" = "8:"
+            "Object" = "8:_8D1D44E8D28342D883BE7433BCFE0670"
+            "FileType" = "3:2"
+            "InstallAction" = "3:1"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:1"
+            "Identifier" = "8:_4529F5B4_8814_4253_8AB0_1EEF8BD7C5A1"
             "InstallerClass" = "11:TRUE"
             "CustomActionData" = "8:/DSN=[DSN]"
             }
@@ -474,20 +474,20 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_B8A772B5E4DD80DE7BB0564CA190030E"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_A25E1577AE10D2D32C9FD7166EE1D8A7"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:CsvHelper, Version=4.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_B8A772B5E4DD80DE7BB0564CA190030E"
+                    "_A25E1577AE10D2D32C9FD7166EE1D8A7"
                     {
-                    "Name" = "8:CsvHelper.DLL"
+                    "Name" = "8:CsvHelper.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:CsvHelper.DLL"
+            "SourcePath" = "8:CsvHelper.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_0041C68E834044689246FA4F578DE1FE"

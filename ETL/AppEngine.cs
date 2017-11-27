@@ -27,8 +27,7 @@ namespace ETL
                 List<DataTable> data = QueryBuilder.GetData();
 
                 Console.WriteLine("Generating folder tree in FTP");
-                FTPClient ftp = new FTPClient(username, password, host, ftpPort);
-                ftp.GenerateFolderTree(data);                
+                FTPClient ftp = new FTPClient(username, password, host, ftpPort);                           
                 foreach (DataTable table in data)
                 {
                     int filePathsCount = 0;                    
@@ -36,11 +35,12 @@ namespace ETL
                                             .Select(row => row.Field<string>("Path"))
                                             .Distinct()
                                             .ToList();
-                    
+
+                    ftp.GenerateFolderTree(filePaths);
+
                     foreach (string path in filePaths)
                     {   
-                        Console.WriteLine("Generating CSV");
-                        //TODO:DATAROWS
+                        Console.WriteLine("Generating CSV");                        
                         string ftpPath = path + "/" + table.Rows[0]["FileName"].ToString();
                         DataRow[] csvData = table.Select("path='" + path + "'");
                         string[] excludedColumns = table.Rows[0]["Excludedcolumns"].ToString().Split(',');

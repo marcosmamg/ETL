@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Configuration;
 using System.Diagnostics;
 using System.Reflection;
+using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 
@@ -52,9 +53,12 @@ namespace ETL
         {            
             try
             {
-                string dsnParameter = Context.Parameters["DSN"];                
-                dsnParameter = "Dsn=" + dsnParameter + @";Trusted_Connection=" + "Yes\" providerName =\"System.Data.Odbc\"";
-                MessageBox.Show("instance =" + dsnParameter);
+                string dsnParameter = Context.Parameters["DSN"];
+                var stringBuilder = new StringBuilder();
+                stringBuilder.Append("Dsn=");
+                stringBuilder.Append(dsnParameter);
+                stringBuilder.Append(";Trusted_Connection=Yes");
+                dsnParameter = stringBuilder.ToString();                
 
                 ExeConfigurationFileMap map = new ExeConfigurationFileMap();                
                 
@@ -75,7 +79,8 @@ namespace ETL
                 }
 
                 connectionstring = new ConnectionStringSettings("ETL", dsnParameter);
-                config.ConnectionStrings.ConnectionStrings.Add(connectionstring);
+                connectionstring.ProviderName = "System.Data.Odbc";                
+                config.ConnectionStrings.ConnectionStrings.Add(connectionstring);                
 
                 config.Save(ConfigurationSaveMode.Modified, true);
                 ConfigurationManager.RefreshSection("connectionStrings");
