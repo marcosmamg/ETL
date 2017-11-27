@@ -3,7 +3,7 @@ using System.Globalization;
 using System.IO;
 namespace ETL
 {
-    class Utilities
+    class Utilities 
     {   
         //Method to log any error or completed action
         public static void Logger(string message, string action = "")

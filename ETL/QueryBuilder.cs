@@ -5,18 +5,31 @@ using System.IO;
 
 namespace ETL
 {
-    class QueryBuilder
+    static class QueryBuilder
     {
         private const string QUERIES_FOLDER = "queries\\";
         private const string FILE_TYPE = "*.sql";
-        private static List<string> Queries { get; } = new List<string>();
+        private static List<string> Queries
+        {
+            get
+            {
+                //TODO: SINGLETON
+                List<string> _queries = new List<string>();
+                string[] files = Directory.GetFiles(Utilities.BaseDirectory() + QUERIES_FOLDER, FILE_TYPE, SearchOption.TopDirectoryOnly);
+
+                foreach (var file in files)
+                {
+                    _queries.Add(File.ReadAllText(file));
+                }                    
+                return _queries;
+            }
+        }
 
         public static List<DataTable> GetData()
         {
             List<DataTable> data = new List<DataTable>();        
             try
-            {
-                GetSQLQueries();
+            {                
                 foreach (var query in Queries)
                 {
                     data.Add(ExecuteQuery(query));
@@ -43,23 +56,7 @@ namespace ETL
             }
             return queryData;
         }
-
-        //Obtains SQL queries from files
-        private static void GetSQLQueries()
-        {
-            try
-            {
-                string[] files = Directory.GetFiles(Utilities.BaseDirectory() + QUERIES_FOLDER, FILE_TYPE, SearchOption.TopDirectoryOnly);
-
-                foreach (var file in files)
-                {
-                    Queries.Add(File.ReadAllText(file));                    
-                }              
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }       
+        
+               
     }
 }

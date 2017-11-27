@@ -9,7 +9,7 @@ namespace ETL
     public class CsvGenerator
     {
         //Method that generates CSV File from SQLDatareader
-        public static MemoryStream GenerateCSV(DataRow[] dataRows, DataColumnCollection columns, bool hasCSVHeader, string[] excludedColumns)
+        public static MemoryStream GenerateCSV(DataRow[] dataRows, DataColumnCollection columns, bool hasCSVHeader, List<string> excludedColumns)
         {
             var memoryStream = new MemoryStream();
             try
@@ -33,15 +33,11 @@ namespace ETL
                 
                 foreach (DataRow row in dataRows)
                 {
-                    List<int> excludedColumnsIndex = new List<int>();
-                    foreach (var column in excludedColumns)
-                    {                        
-                        excludedColumnsIndex.Add(row.Table.Columns.IndexOf(column));                            
-                    }
-                    
-                    for (var i = 0; i < columns.Count ; i++)
+
+                    for (var i = 0; i < columns.Count; i++)
                     {
-                        if (excludedColumnsIndex.IndexOf(i) < 0)
+                        Console.WriteLine(excludedColumns.Exists(x => x == columns[i].ColumnName));
+                        if (!excludedColumns.Contains(columns[i].ColumnName))
                             csv.WriteField(row[i]);
                     }
                     csv.NextRecord();

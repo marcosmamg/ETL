@@ -5,7 +5,8 @@ using System.Linq;
 namespace ETL
 {
     public class ApplicationEngine
-    {        
+    {
+        private const int firstRow = 0;
         private static string username = null;
         private static string password = null;
         private static string host = null;
@@ -15,8 +16,7 @@ namespace ETL
         static void Main(string[] args)
         {
             try
-            {
-                int tablesCount = 0;
+            {                
                 if (!HasValidArguments(args))
                 {
                     throw new Exception("The required parameters were not provided: " +
@@ -26,39 +26,27 @@ namespace ETL
                 Console.WriteLine("Reading SQL File(s) and getting Data");
                 List<DataTable> data = QueryBuilder.GetData();
 
-                Console.WriteLine("Generating folder tree in FTP");
-                FTPClient ftp = new FTPClient(username, password, host, ftpPort);                           
+                Console.WriteLine("Generating folder tree in FTP");                
+                FTPClient ftp = new FTPClient(username, password, host, ftpPort);
+                ftp.GenerateFolderTree(data);
+
+                Console.WriteLine("Generating CSV and uploading file");
                 foreach (DataTable table in data)
                 {
-                    int filePathsCount = 0;                    
-                    List<string> filePaths = table.AsEnumerable()
+                    //TODO: Improve extension method
+                    IEnumerable<string> filePaths = table.AsEnumerable()
                                             .Select(row => row.Field<string>("Path"))
-                                            .Distinct()
-                                            .ToList();
-
-                    ftp.GenerateFolderTree(filePaths);
+                                            .Distinct();                                            
 
                     foreach (string path in filePaths)
-                    {   
-                        Console.WriteLine("Generating CSV");                        
-                        string ftpPath = path + "/" + table.Rows[0]["FileName"].ToString();
+                    {                           
                         DataRow[] csvData = table.Select("path='" + path + "'");
-                        string[] excludedColumns = table.Rows[0]["Excludedcolumns"].ToString().Split(',');
+                        List<string> excludedColumns = table.Rows[firstRow]["Excludedcolumns"].ToString().Split(',').ToList();
                         System.IO.MemoryStream file = CsvGenerator.GenerateCSV(csvData, table.Columns, hasCSVHeaders, excludedColumns);
-
-                        Console.WriteLine("Uploading to FTP");                        
-                        //If Last file of datatables: Request KeepAlive = False to close connection
-                        if (tablesCount == data.Count() && filePathsCount == filePaths.Count())
-                        {
-                            ftp.UploadFile(file, ftpPath, false);
-                        }
-                        else
-                        {
-                            ftp.UploadFile(file, ftpPath, true);
-                        }
-                        filePathsCount++;
-                    }
-                    tablesCount++;
+                                                
+                        string fullPath = path + "/" + table.Rows[firstRow]["FileName"].ToString();
+                        ftp.UploadFile(file, fullPath);
+                    }                    
                 }                                
                 Console.WriteLine("Process completed succesfully");
                 Environment.Exit(0);                
