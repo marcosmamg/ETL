@@ -10,7 +10,6 @@ namespace ETL
         private static string password = null;
         private static string host = null;
         private static int ftpPort = 21;
-        private static string rootFolder = null;
         private static bool hasCSVHeaders = false;
 
         static void Main(string[] args)

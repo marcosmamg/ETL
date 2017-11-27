@@ -4,7 +4,7 @@ using System.IO;
 namespace ETL
 {
     class Utilities
-    {   //TODO: ONE FILE PER DAY IN A FOLDER
+    {   
         //Method to log any error or completed action
         public static void Logger(string message, string action = "")
         {
@@ -24,7 +24,8 @@ namespace ETL
                 {
                     outputFile.WriteLine(System.DateTime.Now.ToString(culture) + ':' + message);
                 }
-            }            
+            }
+            Console.WriteLine(message);
         }
         //Method to return Base directory of the execution file
         public static string BaseDirectory()

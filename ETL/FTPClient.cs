@@ -12,8 +12,7 @@ namespace ETL
         private string Username { get; set; }
         private string Password { get; set; }
         private UriBuilder Url { get; set; }        
-        public FtpWebRequest Request { get; set; }
-        //TODO: USE ONLY ONE CONNECTION
+        public FtpWebRequest Request { get; set; }        
         public FTPClient(string _userName, string _password, string _host, int _port)
         {
             Username = _userName;
@@ -58,8 +57,7 @@ namespace ETL
         public void GenerateFolderTree(List<DataTable> data)
         {            
             try
-            {
-                //TODO: Remove watch                
+            {                
                 foreach (var query in data)
                 {
                     List<string> filePaths = query.AsEnumerable()
@@ -83,7 +81,7 @@ namespace ETL
                                 {
                                     folderName = folderName + "/" + folderArray[i] + "/";
                                 }                                                                
-                                if (!IsNotInLocalTree(folderName))
+                                if (!IsInLocalTree(folderName))
                                 {
                                     if (CreateFolderInFTP(folderName))
                                     {                                        
@@ -99,22 +97,16 @@ namespace ETL
             {
                 if (ex.Response != null)
                 {
-                    FtpWebResponse response = (FtpWebResponse)ex.Response;
-                    //Validate if error is 550 (Folder exist)
-                    if (!(response.StatusCode == FtpStatusCode.ActionNotTakenFileUnavailable))
-                    {
-                        //Error is different to Folder exist (550)
-                        Utilities.Logger("FTP Client:" + ex.ToString(), "error");
-                        throw ex;
-                    }                    
+                    Utilities.Logger("FTP Client:" + ex.ToString(), "error");
+                    throw ex;                    
                 }                
                 
             }
         }
 
-        private bool IsNotInLocalTree(string folderName)
+        private bool IsInLocalTree(string folderName)
         {
-            var treeFile = File.ReadAllLines(Utilities.BaseDirectory() + "/Logs/foldersTree.txt");
+            string[] treeFile = File.ReadAllLines(Utilities.BaseDirectory() + "/Logs/foldersTree.txt");
             List<string> treeList = new List<string>(treeFile);            
             return treeList.IndexOf(folderName) >= 0;
         }
@@ -138,7 +130,6 @@ namespace ETL
                 {
                     result = true;
                 }
-
             }
             catch
             {

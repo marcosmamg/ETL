@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.ComponentModel;
+using System.Configuration;
 using System.Diagnostics;
+using System.Reflection;
+using System.Windows.Forms;
 using System.Xml;
 
 namespace ETL
@@ -30,7 +33,7 @@ namespace ETL
             }
             catch (Exception e)
             {
-                Utilities.Logger("Falló actualizando archivos de configuración: " + e.Message, "error");
+                Utilities.Logger("Error updating connection string: " + e.Message, "error");
                 base.Rollback(savedState);
             }
         }
@@ -49,59 +52,33 @@ namespace ETL
         {            
             try
             {
-                string dnsParameter = Context.Parameters["DSN"];
+                string dsnParameter = Context.Parameters["DSN"];                
+                dsnParameter = "Dsn=" + dsnParameter + @";Trusted_Connection=" + "Yes\" providerName =\"System.Data.Odbc\"";
+                MessageBox.Show("instance =" + dsnParameter);
 
-                // Get the path to the executable file that is being installed on the target computer  
-                string assemblypath = Context.Parameters["assemblypath"];
-                string appConfigPath = assemblypath + ".config";
+                ExeConfigurationFileMap map = new ExeConfigurationFileMap();                
+                
+                //Getting the path location 
+                string configFile = string.Concat(Assembly.GetExecutingAssembly().Location, ".config");
+                map.ExeConfigFilename = configFile;
 
-                // Write the path to the app.config file  
-                XmlDocument doc = new XmlDocument();
-                doc.Load(appConfigPath);
+                System.Configuration.Configuration config = System.Configuration.ConfigurationManager.
+                OpenMappedExeConfiguration(map, System.Configuration.ConfigurationUserLevel.None);
 
-                XmlNode connectionStrings = null;
-                foreach (XmlNode node in doc.ChildNodes)
-                    if (node.Name == "connectionStrings")
-                        connectionStrings = node;
+                string connectionsection = config.ConnectionStrings.ConnectionStrings.ToString();                
+                ConnectionStringSettings connectionstring = null;
 
-                if (connectionStrings != null)
-                {                    
-                    // Get the ‘appSettings’ node  
-                    XmlNode settingNode = null;
-                    foreach (XmlNode node in connectionStrings.ChildNodes)
-                    {
-                        if (node.Name == "appSettings")
-                            settingNode = node;
-                    }
-
-                    if (settingNode != null)
-                    {
-                        //MessageBox.Show("settingNode != null");  
-                        //Reassign values in the config file  
-                        foreach (XmlNode node in settingNode.ChildNodes)
-                        {
-                            //MessageBox.Show("node.Value = " + node.Value);  
-                            if (node.Attributes == null)
-                                continue;
-                            XmlAttribute attribute = node.Attributes["value"];
-                            //MessageBox.Show("attribute != null ");  
-                            //MessageBox.Show("node.Attributes['value'] = " + node.Attributes["value"].Value);  
-                            if (node.Attributes["key"] != null)
-                            {
-                                //MessageBox.Show("node.Attributes['key'] != null ");  
-                                //MessageBox.Show("node.Attributes['key'] = " + node.Attributes["key"].Value);  
-                                switch (node.Attributes["key"].Value)
-                                {
-                                    case "TestParameter":
-                                        //Dsn=ETL;Trusted_Connection=Yes
-                                        attribute.Value = "Dsn=" + dnsParameter + ";Trusted_Connection=Yes";
-                                        break;
-                                }
-                            }
-                        }
-                    }
-                    doc.Save(appConfigPath);
+                if (connectionsection != null)
+                {
+                    config.ConnectionStrings.ConnectionStrings.Remove("ETL");
+                    MessageBox.Show("Removing existing Connection String and adding new");
                 }
+
+                connectionstring = new ConnectionStringSettings("ETL", dsnParameter);
+                config.ConnectionStrings.ConnectionStrings.Add(connectionstring);
+
+                config.Save(ConfigurationSaveMode.Modified, true);
+                ConfigurationManager.RefreshSection("connectionStrings");
             }
             catch
             {
