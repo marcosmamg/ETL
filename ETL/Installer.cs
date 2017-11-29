@@ -5,8 +5,6 @@ using System.Configuration;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text;
-using System.Windows.Forms;
-using System.Xml;
 
 namespace ETL
 {
@@ -74,8 +72,7 @@ namespace ETL
 
                 if (connectionsection != null)
                 {
-                    config.ConnectionStrings.ConnectionStrings.Remove("ETL");
-                    MessageBox.Show("Removing existing Connection String and adding new");
+                    config.ConnectionStrings.ConnectionStrings.Remove("ETL");                    
                 }
 
                 connectionstring = new ConnectionStringSettings("ETL", dsnParameter);

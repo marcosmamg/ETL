@@ -118,7 +118,7 @@ namespace ETL
                 if (ex.Response != null)
                 {
                     FtpWebResponse response = (FtpWebResponse)ex.Response;
-                    if (!(response.StatusCode == FtpStatusCode.ActionNotTakenFileUnavailable))
+                    if (response.StatusCode != FtpStatusCode.ActionNotTakenFileUnavailable)
                     {
                         //There was an exception not related to folder exists
                         Utilities.Logger("FTP Client: Issue creating folder"

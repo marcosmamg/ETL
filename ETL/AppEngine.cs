@@ -6,7 +6,7 @@ namespace ETL
 {
     public class ApplicationEngine
     {
-        private const int firstRow = 0;
+        private const int FIRST_ROW = 0;
         private static string username = null;
         private static string password = null;
         private static string host = null;
@@ -41,10 +41,12 @@ namespace ETL
                         foreach (string path in filePaths)
                         {
                             DataRow[] csvData = table.Select("path='" + path + "'");
-                            List<string> excludedColumns = table.Rows[firstRow]["Excludedcolumns"].ToString().Split(',').Select(s => s.Trim()).ToList();
+                            List<string> excludedColumns = table.Rows[FIRST_ROW]["Excludedcolumns"].ToString()
+                                                           .Split(',')
+                                                           .Select(s => s.Trim()).ToList();
                             System.IO.MemoryStream file = CsvGenerator.GenerateCSV(csvData, table.Columns, hasCSVHeaders, excludedColumns);
 
-                            string fullPath = path + "/" + table.Rows[firstRow]["FileName"].ToString();
+                            string fullPath = path + "/" + table.Rows[FIRST_ROW]["FileName"].ToString();
                             ftp.UploadFile(file, fullPath);
                         }
                     }

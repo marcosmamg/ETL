@@ -15,12 +15,6 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_14F3F077EBC24A8EAD3B047D71E60A80"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_32FBF9C94E3948C1BA4F75A072FB89FD"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -34,18 +28,6 @@
         "Entry"
         {
         "MsmKey" = "8:_6474E25590B044709798EE2975834C7A"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_6FD1EAD0EF8466D098C1415D2529B9C0"
-        "OwnerKey" = "8:_8D1D44E8D28342D883BE7433BCFE0670"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_83472E95DAC445DD96F54F70952E8F0B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -75,19 +57,25 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_A25E1577AE10D2D32C9FD7166EE1D8A7"
+        "MsmKey" = "8:_A5495A83FAE918891831B96AE0A1828F"
         "OwnerKey" = "8:_8D1D44E8D28342D883BE7433BCFE0670"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_A25E1577AE10D2D32C9FD7166EE1D8A7"
-        "OwnerKey" = "8:_14F3F077EBC24A8EAD3B047D71E60A80"
+        "MsmKey" = "8:_A5495A83FAE918891831B96AE0A1828F"
+        "OwnerKey" = "8:_E1ABA2F5FFE244938CF3D68A27C77A34"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_D3BD11953FA34CC28FF5720673178549"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E1ABA2F5FFE244938CF3D68A27C77A34"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -106,19 +94,19 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_14F3F077EBC24A8EAD3B047D71E60A80"
+        "OwnerKey" = "8:_E1ABA2F5FFE244938CF3D68A27C77A34"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_A25E1577AE10D2D32C9FD7166EE1D8A7"
+        "OwnerKey" = "8:_A5495A83FAE918891831B96AE0A1828F"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_6FD1EAD0EF8466D098C1415D2529B9C0"
+        "OwnerKey" = "8:_8D1D44E8D28342D883BE7433BCFE0670"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -272,37 +260,6 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_14F3F077EBC24A8EAD3B047D71E60A80"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ETL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_14F3F077EBC24A8EAD3B047D71E60A80"
-                    {
-                    "Name" = "8:ETL.exe"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:..\\..\\ETL\\bin\\Debug\\ETL.exe"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_0041C68E834044689246FA4F578DE1FE"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_32FBF9C94E3948C1BA4F75A072FB89FD"
             {
             "SourcePath" = "8:..\\..\\ETL\\bin\\Debug\\queries\\ITEMS.sql"
@@ -354,57 +311,6 @@
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
             "Hidden" = "11:TRUE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_6FD1EAD0EF8466D098C1415D2529B9C0"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
-                "ScatterAssemblies"
-                {
-                    "_6FD1EAD0EF8466D098C1415D2529B9C0"
-                    {
-                    "Name" = "8:System.Net.Http.dll"
-                    "Attributes" = "3:514"
-                    }
-                }
-            "SourcePath" = "8:System.Net.Http.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_0041C68E834044689246FA4F578DE1FE"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:TRUE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_83472E95DAC445DD96F54F70952E8F0B"
-            {
-            "SourcePath" = "8:..\\..\\ETL\\bin\\Debug\\Logs\\foldersTree.txt"
-            "TargetName" = "8:foldersTree.txt"
-            "Tag" = "8:"
-            "Folder" = "8:_D07F32D4B84644C889F31CCB9C6304D2"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
             "System" = "11:FALSE"
             "Permanent" = "11:FALSE"
             "SharedLegacy" = "11:FALSE"
@@ -474,20 +380,20 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_A25E1577AE10D2D32C9FD7166EE1D8A7"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_A5495A83FAE918891831B96AE0A1828F"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:CsvHelper, Version=4.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_A25E1577AE10D2D32C9FD7166EE1D8A7"
+                    "_A5495A83FAE918891831B96AE0A1828F"
                     {
-                    "Name" = "8:CsvHelper.dll"
+                    "Name" = "8:CsvHelper.DLL"
                     "Attributes" = "3:514"
                     }
                 }
-            "SourcePath" = "8:CsvHelper.dll"
+            "SourcePath" = "8:CsvHelper.DLL"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_0041C68E834044689246FA4F578DE1FE"
@@ -511,6 +417,37 @@
             "TargetName" = "8:PROD.sql"
             "Tag" = "8:"
             "Folder" = "8:_A951BFB70B2B4DE7A16AAD36FBB13B7A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_E1ABA2F5FFE244938CF3D68A27C77A34"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:ETL, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86"
+                "ScatterAssemblies"
+                {
+                    "_E1ABA2F5FFE244938CF3D68A27C77A34"
+                    {
+                    "Name" = "8:ETL.exe"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\..\\ETL\\bin\\Release\\ETL.exe"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_0041C68E834044689246FA4F578DE1FE"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -624,7 +561,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:ETL"
         "ProductCode" = "8:{9EEC4612-55EB-4545-8ECB-779F2832F042}"
-        "PackageCode" = "8:{71BE19E4-A1A6-4908-A018-E76B94B4C377}"
+        "PackageCode" = "8:{D4A29FCC-22DE-472D-AE79-BB6F53C1252E}"
         "UpgradeCode" = "8:{66C51C1A-8EE6-4417-AC30-0430339ECF15}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -1401,7 +1338,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_8D1D44E8D28342D883BE7433BCFE0670"
             {
-            "SourcePath" = "8:..\\..\\ETL\\obj\\Debug\\ETL.exe"
+            "SourcePath" = "8:..\\..\\ETL\\obj\\Release\\ETL.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_0041C68E834044689246FA4F578DE1FE"
