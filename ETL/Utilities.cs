@@ -3,7 +3,7 @@ using System.Globalization;
 using System.IO;
 namespace ETL
 {
-    class Utilities 
+    static class Utilities 
     {   
         //Method to log any error or completed action
         public static void Logger(string message, string action = "")
@@ -35,11 +35,7 @@ namespace ETL
 
                 Console.WriteLine(message);
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            
+            catch{}            
         }     
 
         //Method to return Base directory of the execution file

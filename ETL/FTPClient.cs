@@ -7,7 +7,7 @@ using System.Net;
 using System.Text;
 namespace ETL
 {
-    public class FTPClient
+    class FTPClient
     {
         private string Username { get; set; }
         private string Password { get; set; }

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace ETL
 {
-    public class CsvGenerator
+    static class CsvGenerator
     {
         //Method that generates CSV File from SQLDatareader
         public static MemoryStream GenerateCSV(DataRow[] dataRows, DataColumnCollection columns, bool hasCSVHeader, List<string> excludedColumns)

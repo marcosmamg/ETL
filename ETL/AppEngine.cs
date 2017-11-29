@@ -4,7 +4,7 @@ using System.Data;
 using System.Linq;
 namespace ETL
 {
-    public class ApplicationEngine
+    static class ApplicationEngine
     {
         private const int FIRST_ROW = 0;
         private static string username = null;

@@ -5,7 +5,7 @@ using System.Data.Odbc;
 
 namespace ETL
 {
-    public static class DBClient
+    static class DBClient
     {
         private static ConnectionStringSettings strConnection = ConfigurationManager.ConnectionStrings["ETL"];
         // Method to open DB Connection
