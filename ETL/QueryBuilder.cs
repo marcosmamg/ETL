@@ -7,20 +7,37 @@ namespace ETL
 {
     static class QueryBuilder
     {
-        private const string QUERIES_FOLDER = "queries\\";
+        private const string QUERIES_FOLDER = "Queries\\";
         private const string FILE_TYPE = "*.sql";
         private static List<string> Queries
         {
             get
-            {
-                //TODO: SINGLETON
+            {                
                 List<string> _queries = new List<string>();
-                string[] files = Directory.GetFiles(Utilities.BaseDirectory() + QUERIES_FOLDER, FILE_TYPE, SearchOption.TopDirectoryOnly);
+                string queriesFolder = Path.Combine(Utilities.BaseDirectory(), QUERIES_FOLDER);
 
-                foreach (var file in files)
+                if (!Directory.Exists(queriesFolder))
                 {
-                    _queries.Add(File.ReadAllText(file));
-                }                    
+                    Directory.CreateDirectory(queriesFolder);                    
+                    Utilities.Logger("Query Builder status: There were not queries defined \n" +
+                                     "A folder /Queries with sql files must exist", "error");
+                }
+                else
+                {                    
+                    string[] files = Directory.GetFiles(queriesFolder, FILE_TYPE, SearchOption.TopDirectoryOnly);
+                    if (files.Length > 0)
+                    {
+                        foreach (var file in files)
+                        {
+                            _queries.Add(File.ReadAllText(file));
+                        }
+                    }
+                    else
+                    {
+                        Utilities.Logger("Query Builder status: There were not queries defined", "error");
+                    }                    
+                }
+                
                 return _queries;
             }
         }

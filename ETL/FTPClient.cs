@@ -84,8 +84,9 @@ namespace ETL
                                 }
                                 if (Folders.IndexOf(folderName) == -1)
                                 {
+                                    CreateFolderInFTP(folderName);                                    
                                     Folders.Add(folderName);
-                                    CreateFolderInFTP(folderName);
+                                                                        
                                 }
                             }
                         }
@@ -103,23 +104,30 @@ namespace ETL
             }
         }
 
-        private bool CreateFolderInFTP(string folderName)
-        {
-            bool result;
+        private void CreateFolderInFTP(string folderName)
+        {            
+            string fullPath = Path.Combine(Url.ToString() ,folderName);
             try
             {
-                InitializeRequest(WebRequestMethods.Ftp.MakeDirectory, Url + folderName);
+                InitializeRequest(WebRequestMethods.Ftp.MakeDirectory, fullPath);
 
-                using (var resp = (FtpWebResponse)Request.GetResponse())
-                {
-                    result = true;
-                }
+                using (var resp = (FtpWebResponse)Request.GetResponse()){}
             }
-            catch
+            catch (WebException ex)
             {
-                result = false;
-            }
-            return result;
+                if (ex.Response != null)
+                {
+                    FtpWebResponse response = (FtpWebResponse)ex.Response;
+                    if (!(response.StatusCode == FtpStatusCode.ActionNotTakenFileUnavailable))
+                    {
+                        //There was an exception not related to folder exists
+                        Utilities.Logger("FTP Client: Issue creating folder"
+                                        + ex.Message.ToString() + ":" + fullPath
+                                        , "error");
+                        throw ex;
+                    }                
+                }
+            }            
         }
     }
 }

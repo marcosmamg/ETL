@@ -35,10 +35,12 @@ namespace ETL
                 {
 
                     for (var i = 0; i < columns.Count; i++)
-                    {
-                        Console.WriteLine(excludedColumns.Exists(x => x == columns[i].ColumnName));
+                    {                        
                         if (!excludedColumns.Contains(columns[i].ColumnName))
+                        {
                             csv.WriteField(row[i]);
+                        }
+                            
                     }
                     csv.NextRecord();
                 }

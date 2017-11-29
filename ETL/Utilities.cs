@@ -8,25 +8,40 @@ namespace ETL
         //Method to log any error or completed action
         public static void Logger(string message, string action = "")
         {
-            CultureInfo culture = CultureInfo.CurrentCulture;
-            if (action == "error")
+            try
             {
-                // Write the string to a file named "ETLErrorLog.txt".                
-                using (StreamWriter outputFile = new StreamWriter(Utilities.BaseDirectory() + "Logs/" + @"ETLErrorLog" + DateTime.Now.ToString("yyyyMMdd") + ".txt", true))
-                {                    
-                    outputFile.WriteLine(System.DateTime.Now.ToString(culture) + ':' + message);
-                }
-            }
-            else
-            {
-                // Write the string to a file named "ETLLog.txt".
-                using (StreamWriter outputFile = new StreamWriter(Utilities.BaseDirectory() + "Logs/" + @"ETLLog" + DateTime.Now.ToString("yyyyMMdd") + ".txt", true))
+                CultureInfo culture = CultureInfo.CurrentCulture;
+                string folder = Utilities.BaseDirectory() + "Logs/";
+
+                if (!Directory.Exists(folder))
                 {
-                    outputFile.WriteLine(System.DateTime.Now.ToString(culture) + ':' + message);
+                    Directory.CreateDirectory(folder);
                 }
+
+                if (action == "error")
+                {
+                    using (StreamWriter outputFile = new StreamWriter(folder + @"ETLErrorLog" + DateTime.Now.ToString("yyyyMMdd") + ".txt", true))
+                    {
+                        outputFile.WriteLine(System.DateTime.Now.ToString(culture) + ':' + message);
+                    }
+                }
+                else
+                {
+                    using (StreamWriter outputFile = new StreamWriter(folder + @"ETLLog" + DateTime.Now.ToString("yyyyMMdd") + ".txt", true))
+                    {
+                        outputFile.WriteLine(System.DateTime.Now.ToString(culture) + ':' + message);
+                    }
+                }
+
+                Console.WriteLine(message);
             }
-            Console.WriteLine(message);
-        }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            
+        }     
+
         //Method to return Base directory of the execution file
         public static string BaseDirectory()
         {
