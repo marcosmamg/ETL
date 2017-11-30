@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
+
 namespace ETL
 {
     static class ApplicationEngine
@@ -32,24 +34,25 @@ namespace ETL
                     ftp.GenerateFolderTree(data);
 
                     Console.WriteLine("Generating CSV and uploading file");
-                    foreach (DataTable table in data)
+                    Parallel.ForEach(data, table =>
                     {
                         IEnumerable<string> filePaths = table.AsEnumerable()
                                                         .Select(row => row.Field<string>("Path"))
                                                         .Distinct();
 
-                        foreach (string path in filePaths)
+                        Parallel.ForEach(filePaths, path =>
                         {
+                            FTPClient ftpFile = new FTPClient(username, password, host, ftpPort);  
                             DataRow[] csvData = table.Select("path='" + path + "'");
                             List<string> excludedColumns = table.Rows[FIRST_ROW]["Excludedcolumns"].ToString()
-                                                           .Split(',')
-                                                           .Select(s => s.Trim()).ToList();
+                                                            .Split(',')
+                                                            .Select(s => s.Trim()).ToList();
                             System.IO.MemoryStream file = CsvGenerator.GenerateCSV(csvData, table.Columns, hasCSVHeaders, excludedColumns);
 
                             string fullPath = path + "/" + table.Rows[FIRST_ROW]["FileName"].ToString();
-                            ftp.UploadFile(file, fullPath);
-                        }
-                    }
+                            ftpFile.UploadFile(file, fullPath);
+                        });
+                    });
 
                     Console.WriteLine("Process completed succesfully");
                 }                

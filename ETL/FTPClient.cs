@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
+
 namespace ETL
 {
     class FTPClient
@@ -19,13 +21,13 @@ namespace ETL
             Password = _password;
             Url = new UriBuilder("ftp", _host, _port);
         }
-        private void InitializeRequest(string method, string fullPath)
-        {
-            Request = (FtpWebRequest)WebRequest.Create(fullPath);
-            Request.Method = method;
-            Request.Credentials = new NetworkCredential(Username, Password);
-            Request.KeepAlive = true;
-        }
+        //private void InitializeRequest(string method, string fullPath)
+        //{
+        //    Request = (FtpWebRequest)WebRequest.Create(fullPath);
+        //    Request.Method = method;
+        //    Request.Credentials = new NetworkCredential(Username, Password);
+        //    Request.KeepAlive = true;
+        //}
         // Method receives file stream to upload it to a given path in the FTP
         public bool UploadFile(MemoryStream file, string path)
         {
@@ -34,7 +36,11 @@ namespace ETL
             {
                 UriBuilder fullPath = new UriBuilder(Url.Scheme, Url.Host, Url.Port, path);
 
-                InitializeRequest(WebRequestMethods.Ftp.UploadFile, fullPath.ToString());
+                //InitializeRequest(WebRequestMethods.Ftp.UploadFile, fullPath.ToString());
+                Request = (FtpWebRequest)WebRequest.Create(fullPath.ToString());
+                Request.Method = WebRequestMethods.Ftp.UploadFile;
+                Request.Credentials = new NetworkCredential(Username, Password);
+                Request.KeepAlive = true;
 
                 Stream requestStream = Request.GetRequestStream();
                 requestStream.Write(file.ToArray(), 0, file.ToArray().Length);
@@ -59,18 +65,18 @@ namespace ETL
             try
             {
                 List<string> Folders = new List<string>();
-                foreach (var table in data)
+                Parallel.ForEach(data, table =>
                 {
                     List<string> filePaths = table.AsEnumerable()
                                 .Select(row => row.Field<string>("Path"))
                                 .Distinct()
                                 .ToList();
 
-                    foreach (string filePath in filePaths)
+                    Parallel.ForEach(filePaths, filePath =>
                     {
                         string[] folderArray = filePath.Split('/');
                         string folderName = "";
-                        for (int i = 0; i < folderArray.Length; i++)
+                        Parallel.For(0, folderArray.Length, i =>
                         {
                             if (!string.IsNullOrEmpty(folderArray[i]))
                             {
@@ -84,14 +90,14 @@ namespace ETL
                                 }
                                 if (Folders.IndexOf(folderName) == -1)
                                 {
-                                    CreateFolderInFTP(folderName);                                    
+                                    CreateFolderInFTP(folderName);
                                     Folders.Add(folderName);
-                                                                        
+
                                 }
                             }
-                        }
-                    }
-                }
+                        });
+                    });
+                });
             }
             catch (WebException ex)
             {
@@ -109,7 +115,11 @@ namespace ETL
             string fullPath = Path.Combine(Url.ToString() ,folderName);
             try
             {
-                InitializeRequest(WebRequestMethods.Ftp.MakeDirectory, fullPath);
+                //InitializeRequest(WebRequestMethods.Ftp.MakeDirectory, fullPath);
+                FtpWebRequest Request = (FtpWebRequest)WebRequest.Create(fullPath);
+                Request.Method = WebRequestMethods.Ftp.MakeDirectory;
+                Request.Credentials = new NetworkCredential(Username, Password);
+                Request.KeepAlive = false;
 
                 using (var resp = (FtpWebResponse)Request.GetResponse()){}
             }
