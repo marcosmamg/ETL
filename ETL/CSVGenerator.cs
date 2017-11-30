@@ -26,7 +26,10 @@ namespace ETL
                 {
                     foreach (DataColumn column in columns)
                     {
-                        csv.WriteField(column.ColumnName);
+                        if (!excludedColumns.Contains(column.ColumnName))
+                        {
+                            csv.WriteField(column.ColumnName);
+                        }
                     }
                     csv.NextRecord();
                 }
