@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace ETL
 {
@@ -34,15 +33,14 @@ namespace ETL
                     ftp.GenerateFolderTree(data);
 
                     Console.WriteLine("Generating CSV and uploading file");
-                    Parallel.ForEach(data, table =>
+                    foreach (DataTable table in data)
                     {
                         IEnumerable<string> filePaths = table.AsEnumerable()
                                                         .Select(row => row.Field<string>("Path"))
                                                         .Distinct();
 
-                        Parallel.ForEach(filePaths, path =>
-                        {
-                            FTPClient ftpFile = new FTPClient(username, password, host, ftpPort);  
+                        foreach (string path in filePaths)
+                        {                          
                             DataRow[] csvData = table.Select("path='" + path + "'");
                             List<string> excludedColumns = table.Rows[FIRST_ROW]["Excludedcolumns"].ToString()
                                                             .Split(',')
@@ -50,9 +48,9 @@ namespace ETL
                             System.IO.MemoryStream file = CsvGenerator.GenerateCSV(csvData, table.Columns, hasCSVHeaders, excludedColumns);
 
                             string fullPath = path + "/" + table.Rows[FIRST_ROW]["FileName"].ToString();
-                            ftpFile.UploadFile(file, fullPath);
-                        });
-                    });
+                            ftp.UploadFile(file, fullPath);
+                        }
+                    }
 
                     Console.WriteLine("Process completed succesfully");
                 }                

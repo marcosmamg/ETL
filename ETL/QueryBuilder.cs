@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Threading.Tasks;
 
 namespace ETL
 {
@@ -28,10 +27,10 @@ namespace ETL
                     string[] files = Directory.GetFiles(queriesFolder, FILE_TYPE, SearchOption.TopDirectoryOnly);
                     if (files.Length > 0)
                     {
-                        Parallel.ForEach(files, file =>
+                        foreach (var file in files)
                         {
                             _queries.Add(File.ReadAllText(file));
-                        });
+                        };
                     }
                     else
                     {
@@ -48,10 +47,10 @@ namespace ETL
             List<DataTable> data = new List<DataTable>();        
             try
             {
-                Parallel.ForEach(Queries, query =>
+                foreach (var query in Queries)
                 {
                     data.Add(ExecuteQuery(query));
-                });              
+                }              
             }
             catch (Exception ex)
             {

@@ -33,14 +33,14 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_5C1E6EE580256130DDF962E5A4ACCE98"
-        "OwnerKey" = "8:_7FF4B56BE1FC43EC835AADA1A7625B78"
+        "MsmKey" = "8:_588A5A7C5E578DA230BEBAED8752AF4A"
+        "OwnerKey" = "8:_3F434004C3174028837DD00E109DD586"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_5C1E6EE580256130DDF962E5A4ACCE98"
-        "OwnerKey" = "8:_3F434004C3174028837DD00E109DD586"
+        "MsmKey" = "8:_588A5A7C5E578DA230BEBAED8752AF4A"
+        "OwnerKey" = "8:_7082F123DAB1445D90EDFEAA5304F5BD"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -57,13 +57,13 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_7FD07AE33BD347D5877594D4CBF26056"
+        "MsmKey" = "8:_7082F123DAB1445D90EDFEAA5304F5BD"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_7FF4B56BE1FC43EC835AADA1A7625B78"
+        "MsmKey" = "8:_7FD07AE33BD347D5877594D4CBF26056"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -94,25 +94,25 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_5C1E6EE580256130DDF962E5A4ACCE98"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_3F434004C3174028837DD00E109DD586"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_B42B604C031F40429CADA3D128D7B5F1"
+        "OwnerKey" = "8:_7082F123DAB1445D90EDFEAA5304F5BD"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_7FF4B56BE1FC43EC835AADA1A7625B78"
+        "OwnerKey" = "8:_588A5A7C5E578DA230BEBAED8752AF4A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_B42B604C031F40429CADA3D128D7B5F1"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -306,20 +306,20 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_5C1E6EE580256130DDF962E5A4ACCE98"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_588A5A7C5E578DA230BEBAED8752AF4A"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:CsvHelper, Version=6.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_5C1E6EE580256130DDF962E5A4ACCE98"
+                    "_588A5A7C5E578DA230BEBAED8752AF4A"
                     {
-                    "Name" = "8:CsvHelper.DLL"
+                    "Name" = "8:CsvHelper.dll"
                     "Attributes" = "3:514"
                     }
                 }
-            "SourcePath" = "8:CsvHelper.DLL"
+            "SourcePath" = "8:CsvHelper.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_0041C68E834044689246FA4F578DE1FE"
@@ -377,12 +377,23 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7FD07AE33BD347D5877594D4CBF26056"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_7082F123DAB1445D90EDFEAA5304F5BD"
             {
-            "SourcePath" = "8:..\\..\\ETL\\bin\\x64\\Release\\Queries\\PRICE.sql"
-            "TargetName" = "8:PRICE.sql"
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:ETL, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64"
+                "ScatterAssemblies"
+                {
+                    "_7082F123DAB1445D90EDFEAA5304F5BD"
+                    {
+                    "Name" = "8:ETL.exe"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\..\\ETL\\bin\\x64\\Release\\ETL.exe"
+            "TargetName" = "8:"
             "Tag" = "8:"
-            "Folder" = "8:_A951BFB70B2B4DE7A16AAD36FBB13B7A"
+            "Folder" = "8:_0041C68E834044689246FA4F578DE1FE"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -397,23 +408,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_7FF4B56BE1FC43EC835AADA1A7625B78"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7FD07AE33BD347D5877594D4CBF26056"
             {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ETL, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64"
-                "ScatterAssemblies"
-                {
-                    "_7FF4B56BE1FC43EC835AADA1A7625B78"
-                    {
-                    "Name" = "8:ETL.exe"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:..\\..\\ETL\\bin\\x64\\Release\\ETL.exe"
-            "TargetName" = "8:"
+            "SourcePath" = "8:..\\..\\ETL\\bin\\x64\\Release\\Queries\\PRICE.sql"
+            "TargetName" = "8:PRICE.sql"
             "Tag" = "8:"
-            "Folder" = "8:_0041C68E834044689246FA4F578DE1FE"
+            "Folder" = "8:_A951BFB70B2B4DE7A16AAD36FBB13B7A"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
