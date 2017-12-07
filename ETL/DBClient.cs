@@ -38,8 +38,7 @@ namespace ETL
             }
             catch (Exception ex)
             {
-                Utilities.Logger("Executing SQL" + ex.ToString(), "error");
-                throw ex;
+                Utilities.Logger("Executing SQL" + ex.ToString(), "error");                
             }
             return dataset.Tables[0];
         }
