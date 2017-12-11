@@ -118,6 +118,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SqlOperations.cs" />
     <Compile Include="Installer.cs">
       <SubType>Component</SubType>
     </Compile>
