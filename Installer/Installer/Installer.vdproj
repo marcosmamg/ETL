@@ -15,19 +15,25 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_2E54A237D69846EC80CAD97477C24415"
+        "MsmKey" = "8:_1E7541FAA9BE489E9007215ECFC6C393"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_3B83B4B4F8F94142A6094E3E06F0764B"
+        "MsmKey" = "8:_2909B2B0CE554FFBB27D863B2B42679E"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_3F434004C3174028837DD00E109DD586"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_512A730F81B9435A939D7A894EF992FA"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -45,7 +51,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_5C83450C02884B61808215C65B00C1DE"
+        "MsmKey" = "8:_62A9DA3D15F84438871D21419BDD5FE1"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -63,13 +69,25 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_7FD07AE33BD347D5877594D4CBF26056"
+        "MsmKey" = "8:_8F025A4A26AD4A46B66BAF7439AE21C7"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_9DB3F5287E764104B064CAF16C93A2A0"
+        "MsmKey" = "8:_931FFB071B1E777F9775910675782A83"
+        "OwnerKey" = "8:_3F434004C3174028837DD00E109DD586"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_931FFB071B1E777F9775910675782A83"
+        "OwnerKey" = "8:_7082F123DAB1445D90EDFEAA5304F5BD"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_93F2BCB9499240D3AD945D8F202F3F4C"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -81,13 +99,31 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_D3796BA46B1B4AF29ADD35CE10B986AD"
+        "MsmKey" = "8:_D3DC2053197D4CA781B6922E6D7DC6B6"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_EFB1BA6BE6FB44A1BAAFD581584233DA"
+        "MsmKey" = "8:_DECC62A91A7C4CECAC353093ECFDA79B"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E06DD8054A6642959793E941C5DC7D26"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E54053337B3C4295980DDD632F6813B7"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_FC3989D136F6401F84E123E2BA9ADFFB"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -101,6 +137,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_7082F123DAB1445D90EDFEAA5304F5BD"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_931FFB071B1E777F9775910675782A83"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -266,10 +308,10 @@
         }
         "File"
         {
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2E54A237D69846EC80CAD97477C24415"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1E7541FAA9BE489E9007215ECFC6C393"
             {
-            "SourcePath" = "8:..\\..\\ETL\\bin\\x64\\Release\\Queries\\PROD.sql"
-            "TargetName" = "8:PROD.sql"
+            "SourcePath" = "8:..\\..\\ETL\\bin\\x64\\Release\\Queries\\ITEMS.sql"
+            "TargetName" = "8:ITEMS.sql"
             "Tag" = "8:"
             "Folder" = "8:_A951BFB70B2B4DE7A16AAD36FBB13B7A"
             "Condition" = "8:"
@@ -286,10 +328,30 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3B83B4B4F8F94142A6094E3E06F0764B"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2909B2B0CE554FFBB27D863B2B42679E"
             {
-            "SourcePath" = "8:..\\..\\ETL\\bin\\x64\\Release\\Queries\\ITEMS.sql"
-            "TargetName" = "8:ITEMS.sql"
+            "SourcePath" = "8:..\\..\\ETL\\bin\\x64\\Release\\Queries\\PRICE.sql"
+            "TargetName" = "8:PRICE.sql"
+            "Tag" = "8:"
+            "Folder" = "8:_A951BFB70B2B4DE7A16AAD36FBB13B7A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_512A730F81B9435A939D7A894EF992FA"
+            {
+            "SourcePath" = "8:..\\..\\ETL\\bin\\x64\\Release\\Queries\\CUSTOMER.sql"
+            "TargetName" = "8:CUSTOMER.sql"
             "Tag" = "8:"
             "Folder" = "8:_A951BFB70B2B4DE7A16AAD36FBB13B7A"
             "Condition" = "8:"
@@ -337,10 +399,10 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5C83450C02884B61808215C65B00C1DE"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_62A9DA3D15F84438871D21419BDD5FE1"
             {
-            "SourcePath" = "8:..\\..\\ETL\\bin\\x64\\Release\\Queries\\LEVEL.sql"
-            "TargetName" = "8:LEVEL.sql"
+            "SourcePath" = "8:..\\..\\ETL\\bin\\x64\\Release\\Queries\\ALIAS_ROOT.sql"
+            "TargetName" = "8:ALIAS_ROOT.sql"
             "Tag" = "8:"
             "Folder" = "8:_A951BFB70B2B4DE7A16AAD36FBB13B7A"
             "Condition" = "8:"
@@ -408,10 +470,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7FD07AE33BD347D5877594D4CBF26056"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8F025A4A26AD4A46B66BAF7439AE21C7"
             {
-            "SourcePath" = "8:..\\..\\ETL\\bin\\x64\\Release\\Queries\\PRICE.sql"
-            "TargetName" = "8:PRICE.sql"
+            "SourcePath" = "8:..\\..\\ETL\\bin\\x64\\Release\\Queries\\POHEADER.sql"
+            "TargetName" = "8:POHEADER.sql"
             "Tag" = "8:"
             "Folder" = "8:_A951BFB70B2B4DE7A16AAD36FBB13B7A"
             "Condition" = "8:"
@@ -428,10 +490,41 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9DB3F5287E764104B064CAF16C93A2A0"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_931FFB071B1E777F9775910675782A83"
             {
-            "SourcePath" = "8:..\\..\\ETL\\bin\\x64\\Release\\Queries\\ALIAS.sql"
-            "TargetName" = "8:ALIAS.sql"
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_931FFB071B1E777F9775910675782A83"
+                    {
+                    "Name" = "8:Newtonsoft.Json.dll"
+                    "Attributes" = "3:514"
+                    }
+                }
+            "SourcePath" = "8:Newtonsoft.Json.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_0041C68E834044689246FA4F578DE1FE"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:TRUE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_93F2BCB9499240D3AD945D8F202F3F4C"
+            {
+            "SourcePath" = "8:..\\..\\ETL\\bin\\x64\\Release\\Queries\\PROD.sql"
+            "TargetName" = "8:PROD.sql"
             "Tag" = "8:"
             "Folder" = "8:_A951BFB70B2B4DE7A16AAD36FBB13B7A"
             "Condition" = "8:"
@@ -458,7 +551,7 @@
                     "_B42B604C031F40429CADA3D128D7B5F1"
                     {
                     "Name" = "8:System.Net.Http.dll"
-                    "Attributes" = "3:512"
+                    "Attributes" = "3:514"
                     }
                 }
             "SourcePath" = "8:System.Net.Http.dll"
@@ -469,7 +562,7 @@
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
+            "Hidden" = "11:TRUE"
             "System" = "11:FALSE"
             "Permanent" = "11:FALSE"
             "SharedLegacy" = "11:FALSE"
@@ -479,10 +572,10 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D3796BA46B1B4AF29ADD35CE10B986AD"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D3DC2053197D4CA781B6922E6D7DC6B6"
             {
-            "SourcePath" = "8:..\\..\\ETL\\bin\\x64\\Release\\Queries\\CUSTOMER.sql"
-            "TargetName" = "8:CUSTOMER.sql"
+            "SourcePath" = "8:..\\..\\ETL\\bin\\x64\\Release\\Queries\\PODETAIL.sql"
+            "TargetName" = "8:PODETAIL.sql"
             "Tag" = "8:"
             "Folder" = "8:_A951BFB70B2B4DE7A16AAD36FBB13B7A"
             "Condition" = "8:"
@@ -499,7 +592,67 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_EFB1BA6BE6FB44A1BAAFD581584233DA"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_DECC62A91A7C4CECAC353093ECFDA79B"
+            {
+            "SourcePath" = "8:..\\..\\ETL\\bin\\x64\\Release\\Queries\\ALIAS.sql"
+            "TargetName" = "8:ALIAS.sql"
+            "Tag" = "8:"
+            "Folder" = "8:_A951BFB70B2B4DE7A16AAD36FBB13B7A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E06DD8054A6642959793E941C5DC7D26"
+            {
+            "SourcePath" = "8:..\\..\\ETL\\bin\\x64\\Release\\Queries\\ITEMSRECEIVING.sql"
+            "TargetName" = "8:ITEMSRECEIVING.sql"
+            "Tag" = "8:"
+            "Folder" = "8:_A951BFB70B2B4DE7A16AAD36FBB13B7A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E54053337B3C4295980DDD632F6813B7"
+            {
+            "SourcePath" = "8:..\\..\\ETL\\bin\\x64\\Release\\Queries\\LEVEL.sql"
+            "TargetName" = "8:LEVEL.sql"
+            "Tag" = "8:"
+            "Folder" = "8:_A951BFB70B2B4DE7A16AAD36FBB13B7A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FC3989D136F6401F84E123E2BA9ADFFB"
             {
             "SourcePath" = "8:..\\..\\ETL\\bin\\x64\\Release\\Queries\\OPENINVOICE.sql"
             "TargetName" = "8:OPENINVOICE.sql"
@@ -598,7 +751,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:ETL"
         "ProductCode" = "8:{9EEC4612-55EB-4545-8ECB-779F2832F042}"
-        "PackageCode" = "8:{49EC9463-B62C-4175-833F-E2232B418620}"
+        "PackageCode" = "8:{B9F46421-3B20-414C-8B62-A8F7A80F20FF}"
         "UpgradeCode" = "8:{66C51C1A-8EE6-4417-AC30-0430339ECF15}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

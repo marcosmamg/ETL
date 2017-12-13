@@ -19,7 +19,7 @@ namespace ETL
             {
                 sqlOperations = JsonConvert.DeserializeObject<List<SqlOperations>>(row["Expressions"].ToString());
             }
-            catch (Exception ex) { }
+            catch{ }
             return sqlOperations;
         }
 

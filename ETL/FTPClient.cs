@@ -122,7 +122,7 @@ namespace ETL
                     {
                         //There was an exception not related to folder exists
                         Utilities.Logger("FTP Client: Issue creating folder"
-                                        + ex.Message.ToString() + ":" + fullPath
+                                        + ex.ToString() + ":" + fullPath
                                         , "error");
                         throw ex;
                     }                
